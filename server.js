@@ -39,6 +39,12 @@ function requiredParam(name, req) {
   return param 
 }
 
+// retreive a problem
+function problem() {
+  // TODO: load a problem from a persistent source
+  return {id: '1', description: 'Add two numbers and send back the result', solver: 'adder', args: {a: 2, b: 3}}
+}
+
 var port = parseInt(process.env.PORT || 8000)
 app.listen(port)
 // log some useful details. TODO: replace this with real logging
