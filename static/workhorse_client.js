@@ -21,7 +21,20 @@ function solve(problem) {
     var solution = solver.solve(problem.args);
     console.log('solution:');
     console.log(solution);
+    postSolution(solution);
   });
+}
+
+/**
+ * POSTs the solution back to the server.
+ */
+function postSolution(solution) {
+  jQuery.post('/solution', solution, function(data){
+      console.log('Posted solution:');
+      console.log(solution);
+      console.log('Server response:');
+      console.log(data);
+    });
 }
 
 })();

@@ -29,8 +29,7 @@ app.get('/solver', function(req,res){
     res.send(workhorse.solver(name))  
   })
 app.post('/solution', function(req,res){
-    var problem_id = requiredParam('problem_id', req)
-    res.send('got your solution for problem ' + problem_id + '. thanks for helping out')
+    res.send('got your solution for problem. thanks for helping out')
   })
 
 // helper functions. TODO: move this out of here
