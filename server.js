@@ -1,8 +1,7 @@
 // some dependencies
 var puts = require('sys').puts,
     connect = require('connect'),
-    express = require('express'),
-    workhorse = require('./workhorse');
+    express = require('express');
 
 // initialize the app and fire it up
 var app = express.createServer()
@@ -22,11 +21,7 @@ app.get('/', function(req, res){
     res.render('index.html.ejs')
   })
 app.get('/problem', function(req,res){
-    res.send(workhorse.problem())
-  })
-app.get('/solver', function(req,res){
-    var name = requiredParam('name', req)
-    res.send(workhorse.solver(name))  
+    res.send(problem())
   })
 app.post('/solution', function(req,res){
     res.send('got your solution for problem. thanks for helping out')
