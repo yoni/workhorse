@@ -1,0 +1,6 @@
+Workhorse is a distributed computing server. It serves up problems and solvers and accepts solutions. It is currently intended for running bandwidth or processor intensive operations on the client side of a web application.
+
+Dependencies:
+  connect -- http://github.com/senchalabs/connect
+  express -- http://expressjs.com/
+  
