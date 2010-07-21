@@ -8,7 +8,6 @@ var app = express.createServer()
 
 // configuration 
 app.configure(function() {
-    app.set("root", __dirname)  
     app.use('/static', connect.staticProvider(__dirname + '/static'))
     app.use('/solvers', connect.staticProvider(__dirname + '/solvers'))
   })
