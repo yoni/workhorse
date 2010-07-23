@@ -1,0 +1,5 @@
+* Use a real logger
+* Refactor workhorse code into a library (as opposed to the server instance)
+* Unit testing for solvers
+* Unit testing for workhorse server
+
