@@ -21,7 +21,7 @@ function solve(problem) {
     var solution = solver.solve(problem.args);
     console.log('solution:');
     console.log(solution);
-    postSolution(solution);
+    postSolution({problem_id : problem.id, solution : solution});
   });
 }
 

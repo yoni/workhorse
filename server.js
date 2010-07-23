@@ -1,18 +1,15 @@
-// some dependencies
-var puts = require('sys').puts,
-    connect = require('connect'),
+var connect = require('connect'),
     express = require('express');
 
 // initialize the app and fire it up
-var app = express.createServer()
+var app = express.createServer(
+    connect.logger(),      // logs all requests
+    connect.bodyDecoder()) // makes the POST body available using req.body
 
 // configuration 
 app.configure(function() {
     app.use('/static', connect.staticProvider(__dirname + '/static'))
     app.use('/solvers', connect.staticProvider(__dirname + '/solvers'))
-  })
-app.configure('development', function(){
-    app.enable('reload views', 5000)
   })
 
 // routing
@@ -23,15 +20,11 @@ app.get('/problem', function(req,res){
     res.send(problem())
   })
 app.post('/solution', function(req,res){
-    res.send('got your solution for problem. thanks for helping out')
+    // TODO: store the solution
+    var solution = req.body.solution
+    var problem_id = req.body.problem_id
+    res.send('got your solution for problem ' +  req.body.problem_id + '. thanks for helping out\n')
   })
-
-// helper functions. TODO: move this out of here
-function requiredParam(name, req) {
-  var param = req.param(name)
-  if(!param) throw 'Required parameter ' + name + ' is missing.'
-  return param 
-}
 
 // retreive a problem
 function problem() {
@@ -41,6 +34,7 @@ function problem() {
 
 var port = parseInt(process.env.PORT || 8000)
 app.listen(port)
-// log some useful details. TODO: replace this with real logging
-puts('Workhorse running at http://<your_domain>:' + port)
-puts('Environment is set to ' + app.set('env'))
+
+var environment = app.set('env')
+console.log('Workhorse running at http://<your_domain>:' + port)
+console.log('Environment is set to ' + environment) 
