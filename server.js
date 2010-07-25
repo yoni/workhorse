@@ -20,17 +20,10 @@ app.get('/problem', function(req,res){
     res.send(problem())
   })
 app.post('/solution', function(req,res){
-    try {
-      console.log(req.header('Content-Type'))
-      console.log("body:" + req.body)
-      // TODO: store the solution
-      var solution = req.body.solution
-      var problem_id = req.body.problem_id
-      res.send('got your solution for problem ' +  req.body.problem_id + '. thanks for helping out\n')
-    }
-    catch(err) {
-      console.log(err)
-    }
+    // TODO: store the solution
+    var solution = req.body.solution
+    var problem_id = req.body.problem_id
+    res.send('got your solution for problem ' +  req.body.problem_id + '. thanks for helping out\n')
   })
 
 // retreive a problem
