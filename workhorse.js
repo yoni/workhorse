@@ -2,10 +2,12 @@ var connect = require('connect'),
     express = require('express');
 
 function workhorse(args) {
-  // initialize the app and fire it up
+  validateArgs(args);
+
+  // initialize the app 
   var app = express.createServer(
-      connect.logger(),      // logs all requests
-      connect.bodyDecoder()); // makes the POST body available using req.body
+      connect.logger(),       // log all requests
+      connect.bodyDecoder()); // make the POST body available using req.body
 
   app.configure(function() {
       app.set('views', __dirname + '/views');
@@ -31,6 +33,15 @@ function workhorse(args) {
     });
 
   return app;
+}
+
+function validateArgs(args) {
+  function validateFunctionArgument(args, name) {
+    if(!args[name] || (typeof args[name] != 'function'))
+      throw "Initialization error. Was expecting an argument '" + name + "' of type 'function'";
+  }
+  validateFunctionArgument(args, 'solution');
+  validateFunctionArgument(args, 'problem');
 }
 
 module.exports = workhorse;
