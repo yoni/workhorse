@@ -1,7 +1,7 @@
 var connect = require('connect'),
     express = require('express');
 
-function workhorse(args) {
+function createServer(args) {
   validateArgs(args);
 
   // initialize the app 
@@ -44,4 +44,4 @@ function validateArgs(args) {
   validateFunctionArgument(args, 'problem');
 }
 
-module.exports = workhorse;
+exports.createServer = createServer;

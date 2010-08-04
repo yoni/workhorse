@@ -1,6 +1,6 @@
 var workhorse = require('../workhorse');
 
-workhorse({
+workhorse.createServer({
   // use a static problem server, which always returns the same problem
   problem: function(callback) {
     callback({
