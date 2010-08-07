@@ -1,7 +1,10 @@
 var connect = require('connect'),
     express = require('express');
 
+var problems = {};
+
 function createServer(args) {
+  
   validateArgs(args);
 
   // initialize the app 
@@ -33,6 +36,25 @@ function createServer(args) {
     });
 
   return app;
+}
+
+// register a problem to be solved
+function solve(solver, args, callback, problem_id) {
+  problem_id = validateOrGet(problem_id);
+  problems.push({solver: solver, args: args, callback: callback, id: problem_id});
+}
+
+function validateOrGet(problem_id) {
+  if(problem_id) {
+    if(problems[problem_id])
+      throw 'The problem id must be unique, yet a problem exists with id ' + problem_id;
+  }
+  else {
+    while(!problem_id && !problems[problem_id]) {
+      problem_id = Math.random();
+    }
+  }
+  return problem_id;
 }
 
 function validateArgs(args) {

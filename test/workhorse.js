@@ -1,7 +1,7 @@
 var workhorse = require('../workhorse');
 
 // Create a simple server. Expresso will call the 'listen' function and run each test for us
-var server = workhorse({
+var server = workhorse.createServer({
   // use a static problem server, which always returns the same problem
   problem: function(callback) {
     callback({
@@ -15,7 +15,7 @@ var server = workhorse({
     })
   },
   // use a static solution taker, which simply returns a message that the solution has been received
-  solution: function(solution, problem_id, callback) {
+ solution: function(solution, problem_id, callback) {
     callback('got your solution for problem ' + problem_id + '. thanks for helping out\n');
   }
 });
