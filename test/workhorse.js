@@ -1,25 +1,16 @@
-var workhorse = require('../workhorse');
+var workhorse = require('../workhorse').create();
 
+var solution = null;
+
+// add a problem to solve
+workhorse.register('add two numbers', 'adder', {a:1, b:2}, function(sol) {
+    solution = sol;
+  });
+  
 // Create a simple server. Expresso will call the 'listen' function and run each test for us
-var server = workhorse.createServer({
-  // use a static problem server, which always returns the same problem
-  problem: function(callback) {
-    callback({
-      id: '1',
-      description: 'Add two numbers and send back the result',
-      solver: 'adder',
-      args: {
-        a: 2,
-        b: 3
-      }
-    })
-  },
-  // use a static solution taker, which simply returns a message that the solution has been received
- solution: function(solution, problem_id, callback) {
-    callback('got your solution for problem ' + problem_id + '. thanks for helping out\n');
-  }
-});
+var server = workhorse.createServer();
 
+// expresso will run all tests in 'exports'
 module.exports = {
   'GET homepage': function(assert) {
     assert.response(server, {
@@ -34,19 +25,20 @@ module.exports = {
     });
   },
   'GET problem': function(assert) {
+
     assert.response(server, {
       url: '/problem',
       timeout: 500
     },
     {
       status: 200,
-      body: '{"id":"1","description":"Add two numbers and send back the result","solver":"adder","args":{"a":2,"b":3}}'
+      body: '{"id":"add two numbers","solver":"adder","data":{"a":1,"b":2}}'
     });
   },
   'POST solution': function(assert) {
     var solution = {
-      solution: 5,
-      problem_id: 1
+      solution: 3,
+      problem_id: "add two numbers"
     };
     var body = JSON.stringify(solution);
     assert.response(server, {
@@ -62,7 +54,11 @@ module.exports = {
     },
     {
       status: 200,
-      body: 'got your solution for problem 1. thanks for helping out\n'
+      body: '{"problem_id":"add two numbers","wrote_solution":"OK"}'
+    },
+    function(res){
+      assert.equal(3, solution.solution);
+      assert.equal("add two numbers",  solution.problem_id);
     });
   }
 };
