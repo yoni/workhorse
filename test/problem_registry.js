@@ -14,7 +14,7 @@ module.exports = {
     
     var pr = problem_registry.create();
     
-    pr.register("add two numbers",{a:1, b:2}, function(err){
+    pr.register('add two numbers', 'adder', {a:1, b:2}, function(err){
         if(!err) {
           add_worked = true;
         }
@@ -34,8 +34,8 @@ module.exports = {
     var can_not_add_same_problem_twice = false;
     var pr = problem_registry.create();
 
-    pr.register("add two numbers", {a:1, b:2}, function(err){
-        pr.register("add two numbers", {a:1, b:3},function(err){
+    pr.register('add two numbers', 'adder', {a:1, b:2}, function(err){
+        pr.register("add two numbers", 'adder', {a:1, b:3},function(err){
 
             if(err) {
               can_not_add_same_problem_twice = true;
@@ -55,7 +55,7 @@ module.exports = {
     var error;
     var pr = problem_registry.create();
 
-    pr.register('1', {greeting:'hi'}, function(err1){
+    pr.register('1', 'adder', {greeting:'hi'}, function(err1){
     
         if(err1) {
           error = err1;
@@ -91,7 +91,7 @@ module.exports = {
     var pr = problem_registry.create();
 
 
-    pr.register('1', {greeting:'hi'}, function(err){
+    pr.register('1', 'adder', {greeting:'hi'}, function(err){
     
         if(err) {
           error = err;
@@ -125,7 +125,7 @@ module.exports = {
     var pr = problem_registry.create();
 
 
-    pr.register('1', {greeting:'hi'}, function(err1){
+    pr.register('1', 'greeter', {greeting:'hi'}, function(err1){
 
         if(err1) {
           error = err1;
@@ -159,5 +159,36 @@ module.exports = {
         assert.ok(!error, error);
         assert.ok(can_not_solve_twice, 'Should not be able to solve the same problem twice');
       });
+  },
+  'Get next problem from queue': function(assert, beforeExit) {
+
+    var got_problem_to_solve;
+    var error;
+    var pr = problem_registry.create();
+
+    pr.register('1', 'adder', {a:1, b:2}, function(err1){
+
+        if(err1) {
+          error = err1;
+        }
+        else {
+          pr.getNextProblemToSolve(function(err2, problem) {
+              if(err2) {
+                error = err2;
+              }
+              else {
+                got_problem_to_solve = true;
+              }
+            });
+
+        }
+
+      });
+
+    beforeExit(function(){
+        assert.ok(!error, error);
+        assert.ok(got_problem_to_solve, 'Could not get problem to solve');
+      });
   }
+
 };
