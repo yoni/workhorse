@@ -1,20 +1,7 @@
 * Use a real logger
 * Write more solvers 
 
-* In-memory problem getter
-* In-memory solution handler
-* Example usage with in-memory poblem getter
-* Example usage with in-memory solution handler
+* Change callback to be a URL to POST the solution to, since there's no way to persist a function
+* Persist problems and solutions
 
-* Flat file problem getter
-* Flat file solution handler
-* Example usage with flat-file poblem getter
-* Example usage with flat-file solution handler
-
-* MongoDB problem getter
-* MongoDB solution handler
-* Example usage with MongoDB poblem getter
-* Example usage with MongoDB solution handler
-
-* Create standard CommonJS package
 * Publish with npm
