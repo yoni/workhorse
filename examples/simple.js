@@ -1,21 +1,14 @@
-var workhorse = require('../workhorse');
+var workhorse = require('../workhorse').create();
 
-workhorse.createServer({
-  // use a static problem server, which always returns the same problem
-  problem: function(callback) {
-    callback({
-      id: '1',
-      description: 'Add two numbers and send back the result',
-      solver: 'adder',
-      args: {
-        a: 2,
-        b: 3
-      }
-    })
-  },
-  // use a static solution taker, which simply returns a message that the solution has been received
-  solution: function(solution, problem_id, callback) {
-    callback('Got your solution for problem ' + problem_id + '. thanks for helping out\n');
-  }
-}).listen(8000);
+// Register a problem. The problem will be queued and the callback will be called once it's solved.
+workhorse.register(
+  'add two numbers',
+  'adder',
+  {a:1, b:3},
+  function(solution) {
+    console.log('Got a solution! [%s]', solution);
+  });
+
+// Fire up a server to handle problem and solver GETs, and solution POSTs. See workhorse.js for more details.
+workhorse.createServer().listen(8000);
 
