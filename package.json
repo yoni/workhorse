@@ -9,7 +9,9 @@
   "dependencies": {
     "connect": ">= 0.2.3",
     "express": ">=1.0.0rc",
-    "ejs": ">=0.0.3"
+    "ejs": ">=0.0.3",
+    "expresso": ">=0.6.1",
+    "keys": ">=0.1.0"
   },
   "licenses": [
    {
