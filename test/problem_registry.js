@@ -92,7 +92,7 @@ module.exports = {
 
 
     pr.register('1', 'adder', {greeting:'hi'}, function(err){
-    
+
         if(err) {
           error = err;
         }
@@ -106,7 +106,7 @@ module.exports = {
               else {
                 solve_worked = true;
               }
-              
+
             });
 
         }
@@ -118,7 +118,7 @@ module.exports = {
         assert.ok(solve_worked, 'Could not solve the problem');
       });
   },
-  'Can not solve a problem twice': function(assert, beforeExit) {
+ 'Can not solve a problem twice': function(assert, beforeExit) {
 
     var can_not_solve_twice;
     var error;
@@ -160,7 +160,7 @@ module.exports = {
         assert.ok(can_not_solve_twice, 'Should not be able to solve the same problem twice');
       });
   },
-  'Get next problem from queue': function(assert, beforeExit) {
+  'Get the next problem from the queue': function(assert, beforeExit) {
 
     var got_problem_to_solve;
     var error;
