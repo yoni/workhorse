@@ -1,5 +1,7 @@
 var problem_registry = require('../lib/problem_registry');
 
+var callbackURI = 'http://localhost:8000/404';
+
 module.exports = {
   'Constructor': function(assert) {
 
@@ -14,7 +16,7 @@ module.exports = {
     
     var pr = problem_registry.create();
     
-    pr.register('add two numbers', 'adder', {a:1, b:2}, function(err){
+    pr.register('add two numbers', 'adder', callbackURI, {a:1, b:2}, function(err){
         if(!err) {
           add_worked = true;
         }
@@ -34,8 +36,8 @@ module.exports = {
     var can_not_add_same_problem_twice = false;
     var pr = problem_registry.create();
 
-    pr.register('add two numbers', 'adder', {a:1, b:2}, function(err){
-        pr.register("add two numbers", 'adder', {a:1, b:3},function(err){
+    pr.register('add two numbers', 'adder', callbackURI, {a:1, b:2}, function(err){
+        pr.register("add two numbers", 'adder', callbackURI, {a:1, b:3},function(err){
 
             if(err) {
               can_not_add_same_problem_twice = true;
@@ -55,7 +57,7 @@ module.exports = {
     var error;
     var pr = problem_registry.create();
 
-    pr.register('1', 'adder', {greeting:'hi'}, function(err1){
+    pr.register('1', 'adder', callbackURI, {greeting:'hi'}, function(err1){
     
         if(err1) {
           error = err1;
@@ -91,7 +93,7 @@ module.exports = {
     var pr = problem_registry.create();
 
 
-    pr.register('1', 'adder', {greeting:'hi'}, function(err){
+    pr.register('1', 'adder', callbackURI, {greeting:'hi'}, function(err){
 
         if(err) {
           error = err;
@@ -125,7 +127,7 @@ module.exports = {
     var pr = problem_registry.create();
 
 
-    pr.register('1', 'greeter', {greeting:'hi'}, function(err1){
+    pr.register('1', 'greeter', callbackURI, {greeting:'hi'}, function(err1){
 
         if(err1) {
           error = err1;
@@ -166,7 +168,7 @@ module.exports = {
     var error;
     var pr = problem_registry.create();
 
-    pr.register('1', 'adder', {a:1, b:2}, function(err1){
+    pr.register('1', 'adder', callbackURI, {a:1, b:2}, function(err1){
 
         if(err1) {
           error = err1;

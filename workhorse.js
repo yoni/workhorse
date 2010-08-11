@@ -21,9 +21,9 @@ function workhorse() {
    * @param problem_id -- a unique id
    * @return problem_id -- the unique key for the problem added
    */
-  function register(problem_id, solver, data, callback) {
+  function register(problem_id, solver, callbackURI, data, callback) {
 
-    registry.register(problem_id, solver, data, function(err){
+    registry.register(problem_id, solver, callbackURI, data, function(err){
     
       if(err) {
         callback(err);       

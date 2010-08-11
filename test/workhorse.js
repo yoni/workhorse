@@ -3,7 +3,7 @@ var workhorse = require('../workhorse').create();
 var solution = null;
 
 // add a problem to solve
-workhorse.register('add_two_numbers', 'adder', {a:1, b:2}, function(sol) {
+workhorse.register('add_two_numbers', 'adder', 'http://localhost:9999', {a:1, b:2}, function(sol) {
     solution = sol;
   });
   
@@ -32,7 +32,7 @@ module.exports = {
     },
     {
       status: 200,
-      body: '{"id":"add_two_numbers","solver":"adder","data":{"a":1,"b":2}}'
+      body: '{"id":"add_two_numbers","solver":"adder","callbackURI":"http://localhost:9999","data":{"a":1,"b":2},"solution":null}'
     });
   },
   'POST solution': function(assert) {
