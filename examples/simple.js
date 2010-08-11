@@ -2,7 +2,7 @@ var workhorse = require('../workhorse').create();
 
 // Register a problem. The problem will be queued and the callback will be called once it's solved.
 workhorse.register(
-  'add two numbers',
+  'add_two_numbers',
   'adder',
   {a:1, b:3},
   function(solution) {
