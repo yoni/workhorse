@@ -1,5 +1,6 @@
 var connect = require('connect'),
-    express = require('express');
+    express = require('express'),
+    request = require('request'),
     problem_registry = require('./lib/problem_registry');
 
 /**
@@ -62,11 +63,11 @@ function workhorse() {
         registry.getNextProblemToSolve(function(err, problem){
         
           if(err) {
-            throw 'Cannot retrieve a problem to solve';
+            throw err;
           }
           else {
             if(!problem) {
-              throw 'Error retrieving problem';
+              res.send({ error: 'No problems found.' });
             }
             res.send(problem);
           }
@@ -79,19 +80,67 @@ function workhorse() {
         var solution = req.body.solution;
         var problem_id = req.body.problem_id;
 
-        registry.solve(problem_id, solution, function(err) {
+        registry.solve(problem_id, solution, function(err, problem) {
 
             if(err) {
               throw err;
             }
             else {
+
+              // post the solution to the configured uri
+              if(problem.callbackURI) {
+
+                request(
+                  {
+                    uri : problem.callbackURI,
+                    method : 'POST',
+                    body : JSON.stringify(solution)
+                  },
+                  function (error, response) {
+                    if (!error && response.statusCode == 200) {
+                      sys.puts(response);
+                    }
+                  });
+
+              }
+              
               res.send({problem_id: problem_id, wrote_solution: "OK"})
               callbacks[problem_id](solution);
             }
 
           });
+          
 
       });
+    app.get('/solution/:problem_id', function(req,res){
+
+        var problem_id = req.params.problem_id;
+
+        registry.get(problem_id, function(err, problem) {
+
+            if(err) {
+              throw err;
+            }
+            else if(!problem) {
+              res.send({ error: 'No problem with id [' + problem_id + ']'}, 404);
+            }
+            else if(!problem.solution) {
+              res.send({ error: 'No solution for problem with id [' + problem_id + ']' }, 404);
+            }
+            else if(problem.solution) {
+            
+              var solution = problem.solution;
+              
+              // respond with the solution
+              res.send(JSON.stringify(solution));
+
+
+            }
+
+          });
+
+      });
+
 
     return app;
 

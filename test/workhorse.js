@@ -3,7 +3,7 @@ var workhorse = require('../workhorse').create();
 var solution = null;
 
 // add a problem to solve
-workhorse.register('add two numbers', 'adder', {a:1, b:2}, function(sol) {
+workhorse.register('add_two_numbers', 'adder', {a:1, b:2}, function(sol) {
     solution = sol;
   });
   
@@ -32,13 +32,13 @@ module.exports = {
     },
     {
       status: 200,
-      body: '{"id":"add two numbers","solver":"adder","data":{"a":1,"b":2}}'
+      body: '{"id":"add_two_numbers","solver":"adder","data":{"a":1,"b":2}}'
     });
   },
   'POST solution': function(assert) {
     var solution = {
       solution: 3,
-      problem_id: "add two numbers"
+      problem_id: "add_two_numbers"
     };
     var body = JSON.stringify(solution);
     assert.response(server, {
@@ -54,12 +54,34 @@ module.exports = {
     },
     {
       status: 200,
-      body: '{"problem_id":"add two numbers","wrote_solution":"OK"}'
+      body: '{"problem_id":"add_two_numbers","wrote_solution":"OK"}'
     },
     function(res){
       assert.equal(3, solution.solution);
-      assert.equal("add two numbers",  solution.problem_id);
+      assert.equal("add_two_numbers",  solution.problem_id);
     });
+  },
+  'GET solution': function(assert) {
+
+    var solution = 3;
+    var problem_id = "add_two_numbers";
+
+    var body = JSON.stringify(solution);
+
+    assert.response(server, {
+        url: '/solution/' + problem_id,
+        method: 'GET',
+        headers: {
+          'Host': 'localhost',
+          'Content-Type': 'application/json',
+        },
+        timeout: 500
+      },
+      {
+        status: 200,
+        body: solution
+      });
+
   }
 };
 
