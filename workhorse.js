@@ -10,15 +10,14 @@ function workhorse() {
 
   var registry = problem_registry.create();
 
-  var callbacks = {};
-
   /**
    * Registers a problem to be solved
    *
+   * @param problem_id -- a unique id
    * @param solver -- the type of solver that is used to solve this problem
    * @param data -- the data to pass to the solver
-   * @param callback -- a function to call with the solution results
-   * @param problem_id -- a unique id
+   * @param callbackURI -- a URI to POST the solution to
+   * @param callback -- called after the problem is registered
    * @return problem_id -- the unique key for the problem added
    */
   function register(problem_id, solver, callbackURI, data, callback) {
@@ -29,7 +28,7 @@ function workhorse() {
         callback(err);       
       }
       else {
-        callbacks[problem_id] = callback;
+        callback();
       }
 
     });
@@ -98,8 +97,8 @@ function workhorse() {
                   },
                   function (error, response) {
                     if(error)
-                      // TODO: record that the POST was not successful
-                      // TODO: set some timeout to retry the POST until it's successful,
+                      // TODO: 1. Record that the POST was not successful
+                      // TODO: 2. Set some timeout to retry the POST until it's successful,
                       //       or better yet, store the problem as completed but not POSTed,
                       //       and have some cron job for rePOSTing all not-POSTed solutions
                     if (!error && response.statusCode == 200) {
@@ -110,7 +109,6 @@ function workhorse() {
               }
               
               res.send({problem_id: problem_id, wrote_solution: "OK"})
-              callbacks[problem_id](solution);
             }
 
           });
