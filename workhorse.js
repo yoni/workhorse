@@ -97,8 +97,13 @@ function workhorse() {
                     body : JSON.stringify(solution)
                   },
                   function (error, response) {
+                    if(error)
+                      // TODO: record that the POST was not successful
+                      // TODO: set some timeout to retry the POST until it's successful,
+                      //       or better yet, store the problem as completed but not POSTed,
+                      //       and have some cron job for rePOSTing all not-POSTed solutions
                     if (!error && response.statusCode == 200) {
-                      sys.puts(response);
+                      // TODO: record that the POST was successful
                     }
                   });
 
@@ -133,7 +138,6 @@ function workhorse() {
               
               // respond with the solution
               res.send(JSON.stringify(solution));
-
 
             }
 
