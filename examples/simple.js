@@ -1,16 +1,35 @@
-var workhorse = require('../workhorse').create();
+var express = require('express'),
+    connect = require('connect'),
+    workhorse = require('../workhorse');
 
-// Register a problem. The problem will be queued and the callback will be called once it's solved.
-workhorse.register(
+function registrationCallback(err) {
+  if(err)
+    console.log(err);
+}
+
+var wh = workhorse.create();
+
+// Register two problems to be solved
+wh.register(
   'add_two_numbers',
   'adder',
-  null,
+  'http://localhost:9999/solution_callback',
   {a:1, b:3},
-  function(err) {
-    if(err)
-      console.log(err);
-  });
+  registrationCallback);
+
+wh.register(
+  'add_two_more_numbers',
+  'adder',
+  'http://localhost:9999/solution_callback',
+  {a:2, b:3},
+  registrationCallback);
 
 // Fire up a server to handle problem and solver GETs, and solution POSTs. See workhorse.js for more details.
-workhorse.createServer().listen(8000);
+wh.createServer().listen(8000);
 
+// Create a server to listen to solution results
+var userServer = express.createServer(connect.logger());
+userServer.post('/solution_callback', function(req, res){
+    res.send('got the solution!');
+  });
+userServer.listen(9999);
