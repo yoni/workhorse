@@ -120,7 +120,6 @@ function workhorse() {
             }
 
           });
-          
 
       });
     app.get('/solution/:problem_id', function(req,res){
