@@ -4,7 +4,7 @@ var workhorse = require('../workhorse').create();
 workhorse.register(
   'add_two_numbers',
   'adder',
-  'http://localhost:8000/solutions_received',
+  null,
   {a:1, b:3},
   function(err) {
     if(err)
