@@ -4,9 +4,11 @@ var workhorse = require('../workhorse').create();
 workhorse.register(
   'add_two_numbers',
   'adder',
+  'http://localhost:8000/solutions_received',
   {a:1, b:3},
-  function(solution) {
-    console.log('Got a solution! [%s]', solution);
+  function(err) {
+    if(err)
+      console.log(err);
   });
 
 // Fire up a server to handle problem and solver GETs, and solution POSTs. See workhorse.js for more details.
