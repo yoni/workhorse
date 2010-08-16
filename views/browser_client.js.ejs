@@ -2,9 +2,13 @@
 
 // Get a problem and send it to be solved
 jQuery.getJSON('<%= problem_uri %>', function(problem) {
-  console.log('Got problem:');
-  console.log(problem);
-  solve(problem); 
+  if(problem) {
+    console.log('problem:', problem);
+    solve(problem);
+  }
+  else {
+    console.log('Did not get a problem to solve.')
+  }
 });
 
 /**
@@ -17,11 +21,8 @@ function solve(problem) {
 
   require.ensure(['<%= solvers_uri %>/' + problem.solver], function(require) {
     var solver = require('<%= solvers_uri %>/' + problem.solver);
-    console.log('solver:');
-    console.log(solver);
+    console.log('solver:', solver);
     var solution = solver.solve(problem.data);
-    console.log('solution:');
-    console.log(solution);
     postSolution({problem_id : problem.id, solution : solution});
   });
 
@@ -32,10 +33,8 @@ function solve(problem) {
  */
 function postSolution(solution) {
   jQuery.post('<%= solution_uri %>', solution, function(data){
-      console.log('Posted solution:');
-      console.log(solution);
-      console.log('Server response:');
-      console.log(data);
+      console.log('Posted solution:', solution);
+      console.log('Server response:', data);
     });
 }
 
