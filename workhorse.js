@@ -9,6 +9,7 @@ var connect = require('connect'),
 function workhorse() {
 
   var registry = problem_registry.create();
+  var browser_client_uri = 'browser_client.js';
 
   /**
    * Registers a problem to be solved
@@ -54,8 +55,15 @@ function workhorse() {
     // request handlers
     app.get('/', function(req, res){
 
-        res.render('index.html.ejs');
-
+        // TODO: Show a help page, server setup, examples, etc on the home page
+        // TODO: Add a separate page for the client-side example
+        res.render('index.html.ejs',
+          {
+            locals: {
+              browser_client_uri: browser_client_uri
+            }
+          });
+          
       });
     app.get('/problem', function(req,res){
 
@@ -142,7 +150,18 @@ function workhorse() {
           });
 
       });
-
+    app.get('/' + browser_client_uri, function(req,res) {
+      // FIXME: CONTENT-TYPE is text/html instead of text/javascript
+      res.render(browser_client_uri + '.ejs',
+        {
+          locals: {
+            problem_uri: '/problem',
+            solution_uri: '/solution',
+            solvers_uri: '/solvers'
+          },
+          layout: false,
+        });
+      });
 
     return app;
 

@@ -1,7 +1,6 @@
 var express = require('express'),
     workhorse = require('../workhorse').create();
 
-
 // We check this flag after the solution is POSTed to make sure the workhorse server
 // POSTs the solution to the callback URI
 var callbackURI_was_called_when_solution_was_posted = false;
@@ -9,14 +8,14 @@ var callbackURI = 'http://localhost:9999';
 
 // A user's server, which is waiting to receive the solution
 function createUserServer() {
-  var user_server = express.createServer();
-  user_server.post('/', function(req, res){
+  var userServer = express.createServer();
+  userServer.post('/', function(req, res){
     callbackURI_was_called_when_solution_was_posted = true;
     res.send('got the solution!');
     // expecting a single call POSTing the solution, then killing the server
-    user_server.close();
+    userServer.close();
   });
-  user_server.listen(9999);
+  userServer.listen(9999);
 }
 
 // SETUP
@@ -107,6 +106,24 @@ module.exports = {
       {
         status: 200,
         body: solution
+      });
+
+  },
+  'Workhorse browser client': function(assert) {
+
+    assert.response(server, {
+        url: '/browser_client.js',
+        method: 'GET',
+        headers: {
+          'Host': 'localhost',
+          'Content-Type': 'application/json',
+        },
+        timeout: 500
+      },
+      {
+        status: 200,
+        // TODO: Test that the browser_client.js script has the correct URIs in it
+        //body: 'nothing here'
       });
 
   }

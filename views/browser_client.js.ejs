@@ -1,7 +1,7 @@
 (function(){
 
 // Get a problem and send it to be solved
-jQuery.getJSON('/problem', function(problem) {
+jQuery.getJSON('<%= problem_uri %>', function(problem) {
   console.log('Got problem:');
   console.log(problem);
   solve(problem); 
@@ -14,22 +14,24 @@ jQuery.getJSON('/problem', function(problem) {
  * 3. Post the solution to /solutions
  */
 function solve(problem) {
-  require.ensure(['solvers/' + problem.solver], function(require) {
-    var solver = require('solvers/' + problem.solver);
+
+  require.ensure(['<%= solvers_uri %>/' + problem.solver], function(require) {
+    var solver = require('<%= solvers_uri %>/' + problem.solver);
     console.log('solver:');
     console.log(solver);
-    var solution = solver.solve(problem.args);
+    var solution = solver.solve(problem.data);
     console.log('solution:');
     console.log(solution);
     postSolution({problem_id : problem.id, solution : solution});
   });
+
 }
 
 /**
  * POSTs the solution back to the server.
  */
 function postSolution(solution) {
-  jQuery.post('/solution', solution, function(data){
+  jQuery.post('<%= solution_uri %>', solution, function(data){
       console.log('Posted solution:');
       console.log(solution);
       console.log('Server response:');
