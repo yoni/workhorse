@@ -13,7 +13,7 @@ function workhorse() {
 
   /**
    * Registers a problem to be solved
-   *
+   * TODO: Change the order of the arguments so that callback args are at the end
    * @param problem_id -- a unique id
    * @param solver -- the type of solver that is used to solve this problem
    * @param data -- the data to pass to the solver
@@ -74,7 +74,7 @@ function workhorse() {
           }
           else {
             if(!problem) {
-              res.send({ error: 'No problems found.' });
+              res.send({ error: 'No problems found.' }, 404);
             }
             res.send(problem);
           }
