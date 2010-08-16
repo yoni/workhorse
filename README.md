@@ -14,7 +14,11 @@ Dependencies
 ------------
 For dependencies, see package.json
 
-Run Tests
+Run All Tests
+---------
+    expresso
+
+Run Individual Tests
 ---------
     expresso test/workhorse.js
     expresso test/problem_registry.js
