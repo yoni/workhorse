@@ -1,17 +1,22 @@
 (function(){
 
-// Get a problem and send it to be solved
-jQuery.getJSON('<%= problem_uri %>', function(problem) {
+console.log('Running workhorse client.');
+getAProblemAndSolveIt();
 
-    if(problem) {
-      console.log('problem:', problem);
-      solve(problem);
-    }
-    else {
-      console.log('Did not get a problem to solve.')
-    }
+/**
+ * Retrieves a problem from the server and solves it Continues until there are no more problems.
+ */
+function getAProblemAndSolveIt() {
+  // Get a problem and send it to be solved
+  jQuery.getJSON('<%= problem_uri %>', function(problem) {
 
-  });
+      if(problem) {
+        console.log('Got another problem:', problem);
+        solve(problem);
+      }
+
+    });
+}
 
 /**
  * In order to solve the problem, we:
@@ -39,7 +44,9 @@ function postSolution(solution) {
 
   jQuery.post('<%= solution_uri %>', solution, function(data){
       console.log('Posted solution:', solution);
-      console.log('Server response:', data);
+      console.log('Response to posted solution:', data);
+      // Once we're done solving the problem, we try to get another to solve
+      getAProblemAndSolveIt();
     });
     
 }
