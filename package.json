@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "author": "Yoni Ben-Meshulam <yoni.bmesh@gmail.com>",
   "contributors": [ 
-    { "name": "Yoni Ben-Meshulam", "email": "yoni.bmesh@gmail.com" }
+    { "name": "Yoni Ben-Meshulam", "email": "yoni@opower.com" }
   ],
   "dependencies": {
     "connect": ">= 0.2.3",
