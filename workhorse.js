@@ -1,15 +1,42 @@
 var connect = require('connect'),
     express = require('express'),
     request = require('request'),
+    assert = require('assert'),
+    keys = require('keys'),
     problem_registry = require('./lib/problem_registry');
+
+/**
+ * Creates a workhorse, along with it's data store and servers (see createServers() and register())
+ */
+exports.create = function(datastore){
+  return new workhorse(datastore);
+};
 
 /**
  * Create a new workhorse.
  */
-function workhorse() {
+function workhorse(datastore) {
 
-  var registry = problem_registry.create();
+  if(!datastore) {
+    datastore = new keys.Memory({ reapInterval: 200 });
+    console.log('Warning: Using an in-memory data store. The problems and solutions will not be persisted'
+        + ' between application restarts');
+  }
+
+  console.log('Using data store %s', datastore);
+  var registry = problem_registry.create(datastore);
   var browser_client_uri = 'browser_client.js';
+
+  function validate(argtypes, message) {
+    
+    for(i in argtypes) {
+      var arg = argtypes[i][0];
+      var type = argtypes[i][1];
+      assert.ok(arg, message);
+      assert.equal(typeof arg, type);
+    }
+
+  }
 
   /**
    * Registers a problem to be solved
@@ -22,22 +49,32 @@ function workhorse() {
    * @return problem_id -- the unique key for the problem added
    */
   function register(problem_id, solver, callbackURI, data, callback) {
+    validate(
+      [
+        [problem_id, 'string'],
+        [solver, 'string'],
+        [callbackURI, 'string'],
+        [data, 'object'],
+        [callback, 'function']
+      ],
+      'Could not register a problem due to invalid arguments. Expecting:' + 
+      '{ problem_id : "..."}, solver: "...", callbackURI: "...", ' + 
+      'data: {...}, callback: function(err){...} }'
+      );
 
-    registry.register(problem_id, solver, callbackURI, data, function(err){
-    
-      if(err) {
+    registry.register(
+      problem_id,
+      solver,
+      callbackURI,
+      data,
+      function(err){
         callback(err);       
-      }
-      else {
-        callback();
-      }
-
-    });
+      });
 
   }
 
   /**
-   * Create an Express.js HTTP server.
+   * Create a workhorse HTTP server, which extends the express.js server.
    * @return a workhorse server, which is an extension of an express server
    */
   function createServer() {
@@ -172,7 +209,3 @@ function workhorse() {
   };
 
 }
-
-exports.create = function(){
-  return new workhorse();
-};

@@ -1,11 +1,18 @@
-var problem_registry = require('../lib/problem_registry');
+var problem_registry = require('../lib/problem_registry'),
+    keys = require('keys');
 
 var callbackURI = 'http://localhost:8000/404';
+
+function newRegistry() {
+    return problem_registry.create(new keys.Memory({ reapInterval: 200 }));
+}
+
+
 
 module.exports = {
   'Constructor': function(assert) {
 
-    var pr = problem_registry.create();
+    var pr = newRegistry(); 
     assert.ok(pr);
 
   },
@@ -14,7 +21,7 @@ module.exports = {
     var add_worked;
     var error;
     
-    var pr = problem_registry.create();
+    var pr = newRegistry(); 
     
     pr.register('add two numbers', 'adder', callbackURI, {a:1, b:2}, function(err){
         if(!err) {
@@ -34,7 +41,7 @@ module.exports = {
   "Can not register same problem twice": function(assert, beforeExit) {
 
     var can_not_add_same_problem_twice = false;
-    var pr = problem_registry.create();
+    var pr = newRegistry(); 
 
     pr.register('add two numbers', 'adder', callbackURI, {a:1, b:2}, function(err){
         pr.register("add two numbers", 'adder', callbackURI, {a:1, b:3},function(err){
@@ -55,7 +62,7 @@ module.exports = {
 
     var get_worked;
     var error;
-    var pr = problem_registry.create();
+    var pr = newRegistry(); 
 
     pr.register('1', 'adder', callbackURI, {greeting:'hi'}, function(err1){
     
@@ -90,8 +97,7 @@ module.exports = {
 
     var solve_worked;
     var error;
-    var pr = problem_registry.create();
-
+    var pr = newRegistry(); 
 
     pr.register('1', 'adder', callbackURI, {greeting:'hi'}, function(err){
 
@@ -124,8 +130,7 @@ module.exports = {
 
     var can_not_solve_twice;
     var error;
-    var pr = problem_registry.create();
-
+    var pr = newRegistry(); 
 
     pr.register('1', 'greeter', callbackURI, {greeting:'hi'}, function(err1){
 
@@ -166,7 +171,7 @@ module.exports = {
 
     var got_problem_to_solve;
     var error;
-    var pr = problem_registry.create();
+    var pr = newRegistry(); 
 
     pr.register('1', 'adder', callbackURI, {a:1, b:2}, function(err1){
 
