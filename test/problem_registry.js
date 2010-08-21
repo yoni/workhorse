@@ -23,8 +23,13 @@ module.exports = {
     
     var pr = newRegistry(); 
     
-    pr.register('add two numbers', 'adder', callbackURI, {a:1, b:2}, function(err){
+    pr.register('add two numbers', 'adder', callbackURI, {a:1, b:2}, function(err, problem){
         if(!err) {
+          if(!problem) {
+            throw new Error('Did not get back the problem after registration, but the registration'
+              + ' completed and returned no error');
+          }
+            
           add_worked = true;
         }
         else {
