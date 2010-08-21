@@ -23,7 +23,6 @@ function workhorse(datastore) {
         + ' between application restarts');
   }
 
-  console.log('Using data store %s', datastore);
   var registry = problem_registry.create(datastore);
   var browser_client_uri = 'browser_client.js';
 
