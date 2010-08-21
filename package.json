@@ -3,6 +3,7 @@
   "description": "Distributed computation server and clients",
   "version": "0.0.1",
   "author": "Yoni Ben-Meshulam <yoni.bmesh@gmail.com>",
+  "main" : "workhorse.js",
   "contributors": [ 
     { "name": "Yoni Ben-Meshulam", "email": "yoni@opower.com" }
   ],
