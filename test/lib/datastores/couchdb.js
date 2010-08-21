@@ -11,7 +11,7 @@ var client = couchdb.createClient(5984, 'localhost');
 var db = client.db('workhorse_test');
 
 function newDatastore() {
-	return couchdb_datastore.createDataStore('localhost', 5984, 'workhorse_test');
+	return couchdb_datastore.create('localhost', 5984, 'workhorse_test');
 }
 
 module.exports = {
