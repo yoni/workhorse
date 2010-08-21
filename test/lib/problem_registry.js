@@ -1,4 +1,4 @@
-var problem_registry = require('../lib/problem_registry'),
+var problem_registry = require('../../lib/problem_registry'),
     keys = require('keys');
 
 var callbackURI = 'http://localhost:8000/404';
