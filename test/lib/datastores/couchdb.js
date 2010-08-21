@@ -124,14 +124,15 @@ function get(assert, beforeExit) {
 }
 
 function has(assert, beforeExit) {
-	var key = 'document_for_has';
+	var key = 'document_for_has_after_put';
   var error;
-  var has_worked = false;
-  
+  var has_after_put_worked = false;
+  var has_no_such_document_worked = false;
+
 	var store = newDatastore();
 
   // 1. Add a document
-  db.saveDoc('document_for_has',
+  db.saveDoc(key,
     {
       hi: 'hi'
     },
@@ -142,7 +143,7 @@ function has(assert, beforeExit) {
       // 2. Check that has finds that document
       store.has(key, function(err,result) {
 
-          has_worked = result;
+          has_after_put_worked = result;
           
           // 3. Cleanup = remove the document 
           remove(key, ok.rev);
@@ -150,9 +151,16 @@ function has(assert, beforeExit) {
         });
     });
     
+  store.has('no_such_document', function(err,result) {
+
+      has_no_such_document_worked = !result;
+
+    });
+
 	beforeExit(function() {
 		assert.ok(!error, JSON.stringify(error));
-		assert.ok(has_worked, 'Has did not work');
+		assert.ok(has_after_put_worked, 'Has did not work: saved a document but could not find it.');
+		assert.ok(has_no_such_document_worked, 'Has did not work. Document should be missing but was found.');
 	});
 }
 
