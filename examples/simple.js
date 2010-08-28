@@ -2,34 +2,44 @@ var express = require('express'),
     connect = require('connect'),
     workhorse = require('../workhorse');
 
-function registrationCallback(err) {
-    if (err)
-        console.log(err);
-}
-
 var wh = workhorse.create();
 
 // Register two problems to be solved
-wh.register(
+wh.postProblem(
         'add_two_numbers',
         'adder',
-        'http://localhost:9999/solution_callback',
         {a:1, b:3},
-        registrationCallback);
+        function(err) {
+            if(err) {
+                throw err;
+            }
+            else {
+                console.log('Posted a problem');
+            }
+        });
 
-wh.register(
-        'add_two_more_numbers',
-        'adder',
-        'http://localhost:9999/solution_callback',
-i       {a:2, b:3},
-        registrationCallback);
-
-// Fire up a server to handle problem and solver GETs, and solution POSTs. See workhorse.js for more details.
-wh.createServer().listen(8000);
-
-// Create a server to listen to solution results
-var userServer = express.createServer(connect.logger());
-userServer.post('/solution_callback', function(req, res) {
-    res.send('got the solution!');
+wh.getProblem(function(error, problem){
+    if(error) {
+        throw error;
+    }
+    else {
+        console.log('Got a problem.');
+        wh.postSolution({solution:problem.data.a + problem.data.b, problem_id: 'add_two_numbers'}, function(err) {
+            if(err) {
+                throw err;
+            }
+            else{
+                console.log('Posted the solution.');
+                wh.getSolution('add_two_numbers', function(err, solution) {
+                    if(err) {
+                        throw err;
+                    }
+                    else {
+                        console.log('Got the solution.');
+                    }
+                });
+            }
+        });
+    }
 });
-userServer.listen(9999);
+

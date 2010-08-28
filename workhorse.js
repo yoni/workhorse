@@ -90,7 +90,7 @@ function workhorse(datastore) {
             }
             else {
                 if (!problem) {
-                    res.send({ error: 'No problems found.' }, 404);
+                    callback({ error: 'No problems found.' });
                 }
                 callback(null, problem);
             }
@@ -100,7 +100,6 @@ function workhorse(datastore) {
     }
 
     // TODO: this should be the socket "postSolution" handler
-    // TODO: take the socket client and reply with 'ok' or 'err'
     function postSolution(body, callback) {
 
         var solution = body.solution;

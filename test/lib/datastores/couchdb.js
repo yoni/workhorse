@@ -49,30 +49,30 @@ function set(assert, beforeExit) {
     store.set(key, {
         hi: 'hi'
     },
-            function(err, problem) {
-                if (!err) {
+    function(err, problem) {
+        if (!err) {
 
-                    if (!problem) {
-                        throw new Error('Did not get back the problem after registration, but the registration' + ' completed and returned no error');
-                    }
-                    // 2. Try and get the problem
-                    db.getDoc(key, function(err, doc) {
-                        if (err) {
-                            throw new Error('Set worked, but could not get the doc with couchdb client.');
-                        }
-                        else {
-                            if (doc.hi === 'hi') {
-                                // 3. Cleanup - remove the problem
-                                remove(key, doc._rev);
-                                set_worked = true;
-                            }
-                        }
-                    });
+            if (!problem) {
+                throw new Error('Did not get back the problem after registration, but the registration' + ' completed and returned no error');
+            }
+            // 2. Try and get the problem
+            db.getDoc(key, function(err, doc) {
+                if (err) {
+                    throw new Error('Set worked, but could not get the doc with couchdb client.');
                 }
                 else {
-                    error = err;
+                    if (doc.hi === 'hi') {
+                        // 3. Cleanup - remove the problem
+                        remove(key, doc._rev);
+                        set_worked = true;
+                    }
                 }
             });
+        }
+        else {
+            error = err;
+        }
+    });
 
     beforeExit(function() {
         assert.ok(!error, JSON.stringify(error));
@@ -94,27 +94,27 @@ function get(assert, beforeExit) {
     store.set(key, {
         hi: 'hi'
     },
-            function(err, problem) {
-                if (!err) {
+    function(err, problem) {
+        if (!err) {
 
-                    // 2. Try to get the problem
-                    store.get(key, function(err, doc) {
-                        if (err) {
-                            throw new Error('Set worked, but could not get the doc with "get".');
-                        }
-                        else {
-                            if (doc.hi === 'hi') {
-                                // 3. Cleanup - remove the problem
-                                remove(key, doc._rev);
-                                get_worked = true;
-                            }
-                        }
-                    });
+            // 2. Try to get the problem
+            store.get(key, function(err, doc) {
+                if (err) {
+                    throw new Error('Set worked, but could not get the doc with "get".');
                 }
                 else {
-                    error = err;
+                    if (doc.hi === 'hi') {
+                        // 3. Cleanup - remove the problem
+                        remove(key, doc._rev);
+                        get_worked = true;
+                    }
                 }
             });
+        }
+        else {
+            error = err;
+        }
+    });
 
     beforeExit(function() {
         assert.ok(!error, JSON.stringify(error));
@@ -136,20 +136,20 @@ function has(assert, beforeExit) {
     {
         hi: 'hi'
     },
-            function(err, ok) {
-                if (err)
-                    throw new Error(JSON.stringify(err));
+    function(err, ok) {
+        if (err)
+            throw new Error(JSON.stringify(err));
 
-                // 2. Check that has finds that document
-                store.has(key, function(err, result) {
+        // 2. Check that has finds that document
+        store.has(key, function(err, result) {
 
-                    has_after_put_worked = result;
+            has_after_put_worked = result;
 
-                    // 3. Cleanup = remove the document
-                    remove(key, ok.rev);
+            // 3. Cleanup = remove the document
+            remove(key, ok.rev);
 
-                });
-            });
+        });
+    });
 
     store.has('no_such_document', function(err, result) {
 

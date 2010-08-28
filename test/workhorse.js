@@ -30,10 +30,15 @@ module.exports = {
         beforeExit(function(){
             assert.deepEqual(problem,
             {"id":"add_two_numbers","solver":"adder","data":{"a":1,"b":2},"solution":null});
+            exportPostSolutionTest();
         });
 
-    },
-    'POST solution': function(assert, beforeExit) {
+    }
+};
+
+function exportPostSolutionTest() {
+
+    exports['POST solution'] =  function(assert, beforeExit) {
         var solution = {
             solution: 3,
             problem_id: "add_two_numbers"
@@ -51,10 +56,14 @@ module.exports = {
 
         beforeExit(function() {
             assert.ok(post_succeeded);
+            exportGetSolutionTest();
         });
-        
-    },
-    'GET solution': function(assert) {
+
+    };
+}
+
+function exportGetSolutionTest() {
+    exports['GET solution'] = function(assert) {
 
         var solution = 3;
         var problem_id = "add_two_numbers";
@@ -64,6 +73,5 @@ module.exports = {
             assert.equal(solution, 3);
         });
     }
-};
-
+}
 

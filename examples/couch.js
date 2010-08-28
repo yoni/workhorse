@@ -1,37 +1,96 @@
 var express = require('express'),
-    connect = require('connect'),
-    workhorse = require('../workhorse'),
-    couch_store = require('../lib/datastores/couchdb');
+        connect = require('connect'),
+        workhorse = require('../workhorse'),
+        couch_store = require('../lib/datastores/couchdb');
 
-function registrationCallback(err) {
-    if (err)
-        console.log(err);
-}
+var host = 'localhost';
+var port = 5984;
+var db_name = 'my_workhorse_couch';
 
-var datastore = couch_store.create({host: 'localhost', port: 5984, db_name: 'my_workhorse_couch'});
+var problem_id = 'add_two_numbers';
+
+var datastore = couch_store.create({host: host, port: port, db_name: db_name});
 var wh = workhorse.create(datastore);
 
-// Register two problems to be solved
-wh.register(
-        'add_two_numbers',
+run();
+
+// First, we post a problem and get it
+// Then we post a solution and get it
+function run() {
+
+    wh.postProblem(
+        problem_id,
         'adder',
-        'http://localhost:9999/solution_callback',
         {a:1, b:3},
-        registrationCallback);
+        function(err) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else {
+                console.log('Posted a problem');
+                wh.getProblem(function(error, problem) {
+                    if (error) {
+                        throw error;
+                    }
+                    else {
+                        console.log('Got a problem.');
+                        // Now we solve the problem and get the solution
+                        postASolutionAndGetIt(problem);
+                    }
+                });
+            }
+        });
 
-wh.register(
-        'add_two_more_numbers',
-        'adder',
-        'http://localhost:9999/solution_callback',
-        {a:2, b:3},
-        registrationCallback);
+}
 
-// Fire up a server to handle problem and solver GETs, and solution POSTs. See workhorse.js for more details.
-wh.createServer().listen(8000);
+// Next, we post a solution and get it
+function postASolutionAndGetIt(problem) {
+    wh.postSolution({solution:problem.data.a + problem.data.b, problem_id: problem_id}, function(err) {
+        if (err) {
+            console.log(err);
+            throw err;
+        }
+        else {
+            console.log('Posted the solution.');
+            wh.getSolution(problem_id, function(err, solution) {
+                if (err) {
+                    throw err;
+                }
+                else {
+                    console.log('Got the solution.');
+                    cleanup();
+                }
+            });
+        }
+    });
+}
 
-// Create a server to listen to solution results
-var userServer = express.createServer(connect.logger());
-userServer.post('/solution_callback', function(req, res) {
-    res.send('got the solution!');
-});
-userServer.listen(9999);
+function cleanup() {
+    var client = require('couchdb').createClient(port, host);
+
+    // Create the 'workhorse_test' db. Drop it if it already s
+    var db = client.db(db_name);
+
+    var doc_key = problem_id;
+    db.getDoc(doc_key, function(couch_err, doc) {
+
+        if (couch_err && couch_err.error === 'not_found') {
+            callback(null, false);
+        }
+        else if (couch_err) {
+            callback(couch_err);
+        }
+        else if (!doc) {
+            callback('CouchDB did not return an error, but the document is undefined.');
+        }
+        else {
+            db.removeDoc(doc_key, doc._rev, function(err, ok) {
+                if (err)
+                    throw new Error('Could not remove the doc ' + doc_key);
+            });
+        }
+
+    });
+
+}
