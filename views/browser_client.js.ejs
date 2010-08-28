@@ -4,51 +4,51 @@ console.log('Running workhorse client.');
 getAProblemAndSolveIt();
 
 /**
- * Retrieves a problem from the server and solves it Continues until there are no more problems.
- */
+* Retrieves a problem from the server and solves it Continues until there are no more problems.
+*/
 function getAProblemAndSolveIt() {
-  // Get a problem and send it to be solved
-  jQuery.getJSON('<%= problem_uri %>', function(problem) {
+// Get a problem and send it to be solved
+jQuery.getJSON('<%= problem_uri %>', function(problem) {
 
-      if(problem) {
-        console.log('Got another problem:', problem);
-        solve(problem);
-      }
+if(problem) {
+console.log('Got another problem:', problem);
+solve(problem);
+}
 
-    });
+});
 }
 
 /**
- * In order to solve the problem, we:
- * 1. Get the solver using CommonJS 'require'
- * 2. Run the solver using a webworker (TODO: really use a web worker)
- * 3. Post the solution to /solutions
- */
+* In order to solve the problem, we:
+* 1. Get the solver using CommonJS 'require'
+* 2. Run the solver using a webworker (TODO: really use a web worker)
+* 3. Post the solution to /solutions
+*/
 function solve(problem) {
 
-  require.ensure(['<%= solvers_uri %>/' + problem.solver], function(require) {
+require.ensure(['<%= solvers_uri %>/' + problem.solver], function(require) {
 
-      var solver = require('<%= solvers_uri %>/' + problem.solver);
-      console.log('solver:', solver);
-      var solution = solver.solve(problem.data);
-      postSolution({problem_id : problem.id, solution : solution});
-      
-    });
+var solver = require('<%= solvers_uri %>/' + problem.solver);
+console.log('solver:', solver);
+var solution = solver.solve(problem.data);
+postSolution({problem_id : problem.id, solution : solution});
+
+});
 
 }
 
 /**
- * POSTs the solution back to the server.
- */
+* POSTs the solution back to the server.
+*/
 function postSolution(solution) {
 
-  jQuery.post('<%= solution_uri %>', solution, function(data){
-      console.log('Posted solution:', solution);
-      console.log('Response to posted solution:', data);
-      // Once we're done solving the problem, we try to get another to solve
-      getAProblemAndSolveIt();
-    });
-    
+jQuery.post('<%= solution_uri %>', solution, function(data){
+console.log('Posted solution:', solution);
+console.log('Response to posted solution:', data);
+// Once we're done solving the problem, we try to get another to solve
+getAProblemAndSolveIt();
+});
+
 }
 
 })();

@@ -1,28 +1,31 @@
 {
-  "name": "workhorse",
-  "description": "Distributed computation server and clients",
-  "version": "0.0.2",
-  "author": "Yoni Ben-Meshulam <yoni.bmesh@gmail.com>",
-  "main" : "workhorse.js",
-  "contributors": [ 
-    { "name": "Yoni Ben-Meshulam", "email": "yoni@opower.com" }
-  ],
-  "dependencies": {
-    "connect": ">= 0.2.3",
-    "express": ">=1.0.0rc",
-    "ejs": ">=0.0.3",
-    "expresso": ">=0.6.1",
-    "keys": ">=0.1.0"
-  },
-  "licenses": [
-   {
-     "type": "GPLv2",
-     "url": "http://www.example.com/licenses/gpl.html"
-   }
-  ],
-  "keywords": ["distributed computing", "client-side", "web", "cluster computing", "distributed programming", "distributed systems", "parallel computing"],
-  "engines": { "node": ">= 0.1.99" },
-  "scripts": {
-    "test": "test/workhorse.js"
-  }
+    "name": "workhorse",
+    "description": "Distributed computation server and clients",
+    "version": "0.0.2",
+    "author": "Yoni Ben-Meshulam <yoni.bmesh@gmail.com>",
+    "main" : "workhorse.js",
+    "contributors": [
+        {
+            "name": "Yoni Ben-Meshulam",
+            "email": "yoni@opower.com"
+        }
+    ],
+    "dependencies": {
+        "connect": ">= 0.2.3",
+        "express": ">=1.0.0rc",
+        "ejs": ">=0.0.3",
+        "expresso": ">=0.6.1",
+        "keys": ">=0.1.0"
+    },
+    "licenses": [
+        {
+            "type": "GPLv2",
+            "url": "http://www.example.com/licenses/gpl.html"
+        }
+    ],
+    "keywords": ["distributed computing", "client-side", "web", "cluster computing", "distributed programming", "distributed systems", "parallel computing"],
+    "engines": { "node": ">= 0.1.99" },
+    "scripts": {
+        "test": "test/workhorse.js"
+    }
 }
