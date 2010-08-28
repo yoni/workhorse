@@ -65,23 +65,4 @@ module.exports = {
     }
 };
 
-var oldTests = {
-    'Workhorse browser client': function(assert) {
-
-        assert.response(server, {
-            url: '/browser_client.js',
-            method: 'GET',
-            headers: {
-                'Host': 'localhost',
-                'Content-Type': 'application/json'
-            },
-            timeout: 500
-        },
-        {
-            status: 200
-            // TODO: Test that the browser_client.js script has the correct URIs in it
-        });
-
-    }
-};
 
