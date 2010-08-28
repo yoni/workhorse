@@ -1,50 +1,20 @@
-var express = require('express'),
+var express = require('express');
     workhorse = require('../workhorse').create();
-
-// We check this flag after the solution is POSTed to make sure the workhorse server
-// POSTs the solution to the callback URI
-var callbackURI_was_called_when_solution_was_posted = false;
-var callbackURI = 'http://localhost:9999';
-
-// A user's server, which is waiting to receive the solution
-function createUserServer() {
-  var userServer = express.createServer();
-  userServer.post('/', function(req, res){
-    callbackURI_was_called_when_solution_was_posted = true;
-    res.send('got the solution!');
-    // expecting a single call POSTing the solution, then killing the server
-    userServer.close();
-  });
-  userServer.listen(9999);
-}
 
 // SETUP
 // add a problem to solve
-workhorse.register('add_two_numbers', 'adder', callbackURI, {a:1, b:2}, function(err){
+workhorse.register('add_two_numbers', 'adder', {a:1, b:2}, function(err){
     if(err)
       throw err;
   });
-// create a server to listen for the solution
-createUserServer();
 
-// Create a simple server. Expresso will call the 'listen' function and run each test
-var server = workhorse.createServer();
+
+workhorse.listen({socket:{addListener:function(){}}});
 
 // TESTS
-module.exports = {
-  'GET homepage': function(assert) {
-    assert.response(server, {
-      url: '/',
-      timeout: 500
-    },
-    {
-      status: 200
-    },
-    function(res) {
-      assert.ok(res.body.search('<title>Workhorse</title>') != - 1);
-    });
-  },
-  'GET problem': function(assert) {
+
+var oldTests = {
+  'GET problem': function(assert, beforeExit) {
 
     assert.response(server, {
       url: '/problem',
@@ -52,7 +22,7 @@ module.exports = {
     },
     {
       status: 200,
-      body: '{"id":"add_two_numbers","solver":"adder","callbackURI":"http://localhost:9999","data":{"a":1,"b":2},"solution":null}'
+      body: '{"id":"add_two_numbers","solver":"adder","data":{"a":1,"b":2},"solution":null}'
     });
   },
   'POST solution; solution is POSTed to the callbackURI': function(assert, beforeExit) {
@@ -99,7 +69,7 @@ module.exports = {
         method: 'GET',
         headers: {
           'Host': 'localhost',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         timeout: 500
       },
@@ -116,12 +86,12 @@ module.exports = {
         method: 'GET',
         headers: {
           'Host': 'localhost',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         timeout: 500
       },
       {
-        status: 200,
+        status: 200
         // TODO: Test that the browser_client.js script has the correct URIs in it
         //body: 'nothing here'
       });

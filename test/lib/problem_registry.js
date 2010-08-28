@@ -23,7 +23,7 @@ module.exports = {
     
     var pr = newRegistry(); 
     
-    pr.register('add two numbers', 'adder', callbackURI, {a:1, b:2}, function(err, problem){
+    pr.register('add two numbers', 'adder', {a:1, b:2}, function(err, problem){
         if(!err) {
           if(!problem) {
             throw new Error('Did not get back the problem after registration, but the registration'
@@ -48,8 +48,8 @@ module.exports = {
     var can_not_add_same_problem_twice = false;
     var pr = newRegistry(); 
 
-    pr.register('add two numbers', 'adder', callbackURI, {a:1, b:2}, function(err){
-        pr.register("add two numbers", 'adder', callbackURI, {a:1, b:3},function(err){
+    pr.register('add two numbers', 'adder', {a:1, b:2}, function(err){
+        pr.register("add two numbers", 'adder', {a:1, b:3},function(err){
 
             if(err) {
               can_not_add_same_problem_twice = true;
@@ -69,7 +69,7 @@ module.exports = {
     var error;
     var pr = newRegistry(); 
 
-    pr.register('1', 'adder', callbackURI, {greeting:'hi'}, function(err1){
+    pr.register('1', 'adder', {greeting:'hi'}, function(err1){
     
         if(err1) {
           error = err1;
@@ -104,7 +104,7 @@ module.exports = {
     var error;
     var pr = newRegistry(); 
 
-    pr.register('1', 'adder', callbackURI, {greeting:'hi'}, function(err){
+    pr.register('1', 'adder', {greeting:'hi'}, function(err){
 
         if(err) {
           error = err;

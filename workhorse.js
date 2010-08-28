@@ -43,28 +43,24 @@ function workhorse(datastore) {
    * @param problem_id -- a unique id
    * @param solver -- the type of solver that is used to solve this problem
    * @param data -- the data to pass to the solver
-   * @param callbackURI -- a URI to POST the solution to
    * @param callback -- called after the problem is registered
    * @return problem_id -- the unique key for the problem added
    */
-  function register(problem_id, solver, callbackURI, data, callback) {
+  function register(problem_id, solver, data, callback) {
     validate(
       [
         [problem_id, 'string'],
         [solver, 'string'],
-        [callbackURI, 'string'],
         [data, 'object'],
         [callback, 'function']
       ],
       'Could not register a problem due to invalid arguments. Expecting:' + 
-      '{ problem_id : "..."}, solver: "...", callbackURI: "...", ' + 
-      'data: {...}, callback: function(err){...} }'
+      '{ problem_id : "..."}, solver: "...", data: {...}, callback: function(err){...} }'
       );
 
     registry.register(
       problem_id,
       solver,
-      callbackURI,
       data,
       function(err){
         callback(err);       
@@ -76,35 +72,17 @@ function workhorse(datastore) {
    * Create a workhorse HTTP server, which extends the express.js server.
    * @return a workhorse server, which is an extension of an express server
    */
-  function createServer() {
+  function listen(options) {
 
-    var app = express.createServer(
-        connect.logger(),       // log all requests
-        connect.bodyDecoder()); // make the POST body available using req.body
+    options.socket.addListener('message', function(message) {
+        console.log(message);
+    });
 
-    app.configure(function() {
-        app.set('views', __dirname + '/views');
-        app.use('/static', connect.staticProvider(__dirname + '/static'));
-        app.use('/solvers', connect.staticProvider(__dirname + '/solvers'));
-      });
-
-    // request handlers
-    app.get('/', function(req, res){
-
-        // TODO: Show a help page, server setup, examples, etc on the home page
-        // TODO: Add a separate page for the client-side example
-        res.render('index.html.ejs',
-          {
-            locals: {
-              browser_client_uri: browser_client_uri
-            }
-          });
-          
-      });
-    app.get('/problem', function(req,res){
+    // TODO: This should be the socket "ready:true" handler
+    function getProblem() {
 
         registry.getNextProblemToSolve(function(err, problem){
-        
+
           if(err) {
             throw err;
           }
@@ -117,11 +95,14 @@ function workhorse(datastore) {
 
         });
 
-      });
-    app.post('/solution', function(req,res){
+    }
 
-        var solution = req.body.solution;
-        var problem_id = req.body.problem_id;
+    // TODO: this should be the socket "postSolution" handler
+    // TODO: take the socket client and reply with 'ok' or 'err'
+    function postSolution(client, body){
+
+        var solution = body.solution;
+        var problem_id = body.problem_id;
 
         registry.solve(problem_id, solution, function(err, problem) {
 
@@ -129,38 +110,16 @@ function workhorse(datastore) {
               throw err;
             }
             else {
-
-              // post the solution to the configured uri
-              if(problem.callbackURI) {
-
-                request(
-                  {
-                    uri : problem.callbackURI,
-                    method : 'POST',
-                    body : JSON.stringify(solution)
-                  },
-                  function (error, response) {
-                    if(error)
-                      // TODO: 1. Record that the POST was not successful
-                      // TODO: 2. Set some timeout to retry the POST until it's successful,
-                      //       or better yet, store the problem as completed but not POSTed,
-                      //       and have some cron job for rePOSTing all not-POSTed solutions
-                    if (!error && response.statusCode == 200) {
-                      // TODO: record that the POST was successful
-                    }
-                  });
-
-              }
-              
-              res.send({problem_id: problem_id, wrote_solution: "OK"})
+              client.send({problem_id: problem_id, wrote_solution: "OK"})
             }
 
           });
 
-      });
-    app.get('/solution/:problem_id', function(req,res){
-
-        var problem_id = req.params.problem_id;
+    }
+      
+    // TODO: This should be an asynchronous function call to get a solution
+    // TODO: Need a similar notion for a batch
+    function getSolution(problem_id){
 
         registry.get(problem_id, function(err, problem) {
 
@@ -184,26 +143,13 @@ function workhorse(datastore) {
 
           });
 
-      });
-    app.get('/' + browser_client_uri, function(req,res) {
-      // FIXME: CONTENT-TYPE is text/html instead of text/javascript
-      res.render(browser_client_uri + '.ejs',
-        {
-          locals: {
-            problem_uri: '/problem',
-            solution_uri: '/solution',
-            solvers_uri: '/solvers'
-          },
-          layout: false
-        });
-      });
-
-    return app;
-
+    }
+      
+    // TODO: need to figure out where/how the client script gets loaded/passed/etc.
   }
 
   return {
-    createServer: createServer,
+    listen: listen,
     register: register
   };
 
