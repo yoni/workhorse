@@ -3,83 +3,69 @@ workhorse = require('../workhorse').create();
 
 // SETUP
 // add a problem to solve
-workhorse.register('add_two_numbers', 'adder', {a:1, b:2}, function(err) {
+workhorse.registerProblem('add_two_numbers', 'adder', {a:1, b:2}, function(err) {
     if (err)
         throw err;
 });
 
 
-workhorse.listen({socket:{addListener:function() {
-}}});
+workhorse.listen(
+    {
+        socket:{
+            addListener:function() {}
+        }
+    });
 
 // TESTS
+module.exports = {
 
-var oldTests = {
     'GET problem': function(assert, beforeExit) {
+        var problem;
 
-        assert.response(server, {
-            url: '/problem',
-            timeout: 500
-        },
-        {
-            status: 200,
-            body: '{"id":"add_two_numbers","solver":"adder","data":{"a":1,"b":2},"solution":null}'
+        workhorse.getProblem(function(err, prob){
+            problem = prob;
         });
+        
+        beforeExit(function(){
+            assert.deepEqual(problem,
+            {"id":"add_two_numbers","solver":"adder","data":{"a":1,"b":2},"solution":null});
+        });
+
     },
-    'POST solution; solution is POSTed to the callbackURI': function(assert, beforeExit) {
+    'POST solution': function(assert, beforeExit) {
         var solution = {
             solution: 3,
             problem_id: "add_two_numbers"
         };
-        var body = JSON.stringify(solution);
-        assert.response(
-                server,
-        {
-            url: '/solution',
-            method: 'POST',
-            body: body,
-            headers: {
-                'Host': 'localhost',
-                'Content-Type': 'application/json',
-                'Content-Length': body.length
-            },
-            timeout: 500
-        },
-        {
-            status: 200,
-            body: '{"problem_id":"add_two_numbers","wrote_solution":"OK"}'
-        },
-                function(res) {
-                    assert.equal(3, solution.solution);
-                    assert.equal("add_two_numbers", solution.problem_id);
-                });
+
+        var post_succeeded = false;
+        workhorse.postSolution(solution, function(err){
+            if(err) {
+                throw 'Could not post the solution';
+            }
+            else {
+                post_succeeded = true;
+            }
+        });
 
         beforeExit(function() {
-            assert.ok(callbackURI_was_called_when_solution_was_posted);
+            assert.ok(post_succeeded);
         });
+        
     },
     'GET solution': function(assert) {
 
         var solution = 3;
         var problem_id = "add_two_numbers";
 
-        var body = JSON.stringify(solution);
-
-        assert.response(server, {
-            url: '/solution/' + problem_id,
-            method: 'GET',
-            headers: {
-                'Host': 'localhost',
-                'Content-Type': 'application/json'
-            },
-            timeout: 500
-        },
-        {
-            status: 200,
-            body: solution
+        workhorse.getSolution('add_two_numbers', function(error, solution) {
+            assert.ok(!error);
+            assert.equal(solution, 3);
         });
+    }
+};
 
-    },
+var oldTests = {
     'Workhorse browser client': function(assert) {
 
         assert.response(server, {

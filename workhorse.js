@@ -46,7 +46,7 @@ function workhorse(datastore) {
      * @param callback -- called after the problem is registered
      * @return problem_id -- the unique key for the problem added
      */
-    function register(problem_id, solver, data, callback) {
+    function registerProblem(problem_id, solver, data, callback) {
         validate(
                 [
                     [problem_id, 'string'],
@@ -81,18 +81,18 @@ function workhorse(datastore) {
     }
 
     // TODO: This should be the socket "ready:true" handler
-    function getProblem() {
+    function getProblem(callback) {
 
         registry.getNextProblemToSolve(function(err, problem) {
 
             if (err) {
-                throw err;
+                throw callback(err);
             }
             else {
                 if (!problem) {
                     res.send({ error: 'No problems found.' }, 404);
                 }
-                res.send(problem);
+                callback(null, problem);
             }
 
         });
@@ -101,7 +101,7 @@ function workhorse(datastore) {
 
     // TODO: this should be the socket "postSolution" handler
     // TODO: take the socket client and reply with 'ok' or 'err'
-    function postSolution(client, body) {
+    function postSolution(body, callback) {
 
         var solution = body.solution;
         var problem_id = body.problem_id;
@@ -109,10 +109,10 @@ function workhorse(datastore) {
         registry.solve(problem_id, solution, function(err, problem) {
 
             if (err) {
-                throw err;
+                callback(err);
             }
             else {
-                client.send({problem_id: problem_id, wrote_solution: "OK"})
+                callback(null, {problem_id: problem_id, wrote_solution: "OK"});
             }
 
         });
@@ -121,25 +121,25 @@ function workhorse(datastore) {
 
     // TODO: This should be an asynchronous function call to get a solution
     // TODO: Need a similar notion for a batch
-    function getSolution(problem_id) {
+    function getSolution(problem_id, callback) {
 
         registry.get(problem_id, function(err, problem) {
 
             if (err) {
-                throw err;
+                callback(err);
             }
             else if (!problem) {
-                res.send({ error: 'No problem with id [' + problem_id + ']'}, 404);
+                callback({ error: 'No problem with id [' + problem_id + ']'});
             }
             else if (!problem.solution) {
-                res.send({ error: 'No solution for problem with id [' + problem_id + ']' }, 404);
+                callback({ error: 'No solution for problem with id [' + problem_id + ']' });
             }
             else if (problem.solution) {
 
                 var solution = problem.solution;
 
                 // respond with the solution
-                res.send(JSON.stringify(solution));
+                callback(null, solution);
 
             }
 
@@ -150,7 +150,10 @@ function workhorse(datastore) {
     // TODO: need to figure out where/how the client script gets loaded/passed/etc.
     return {
         listen: listen,
-        register: register
+        getSolution: getSolution,
+        postSolution: postSolution,
+        registerProblem: registerProblem,
+        getProblem: getProblem
     };
 
 }
