@@ -8,7 +8,7 @@ function registrationCallback(err) {
     console.log(err);
 }
 
-var datastore = couch_store.create('localhost', 5984, 'my_workhorse_couch');
+var datastore = couch_store.create({host: 'localhost', port: 5984, db_name: 'my_workhorse_couch'});
 var wh = workhorse.create(datastore);
 
 // Register two problems to be solved
