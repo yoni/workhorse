@@ -194,7 +194,7 @@ function workhorse(datastore) {
             solution_uri: '/solution',
             solvers_uri: '/solvers'
           },
-          layout: false,
+          layout: false
         });
       });
 
