@@ -3,10 +3,6 @@ workhorse = require('../workhorse').create();
 
 // SETUP
 // add a problem to solve
-workhorse.registerProblem('add_two_numbers', 'adder', {a:1, b:2}, function(err) {
-    if (err)
-        throw err;
-});
 
 
 workhorse.listen(
@@ -18,7 +14,12 @@ workhorse.listen(
 
 // TESTS
 module.exports = {
-
+    'POST problem': function(assert, beforeExit) {
+        workhorse.postProblem('add_two_numbers', 'adder', {a:1, b:2}, function(err) {
+            if (err)
+                throw err;
+        });
+    },
     'GET problem': function(assert, beforeExit) {
         var problem;
 

@@ -46,7 +46,7 @@ function workhorse(datastore) {
      * @param callback -- called after the problem is registered
      * @return problem_id -- the unique key for the problem added
      */
-    function registerProblem(problem_id, solver, data, callback) {
+    function postProblem(problem_id, solver, data, callback) {
         validate(
                 [
                     [problem_id, 'string'],
@@ -150,9 +150,9 @@ function workhorse(datastore) {
     // TODO: need to figure out where/how the client script gets loaded/passed/etc.
     return {
         listen: listen,
-        getSolution: getSolution,
         postSolution: postSolution,
-        registerProblem: registerProblem,
+        getSolution: getSolution,
+        postProblem: postProblem,
         getProblem: getProblem
     };
 
