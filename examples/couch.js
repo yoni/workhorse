@@ -1,7 +1,7 @@
 var express = require('express'),
-        connect = require('connect'),
-        workhorse = require('../workhorse'),
-        couch_store = require('../lib/datastores/couchdb');
+    connect = require('connect'),
+    workhorse = require('../workhorse'),
+    couch_store = require('../lib/datastores/couchdb');
 
 var host = 'localhost';
 var port = 5984;
