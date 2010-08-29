@@ -21,6 +21,22 @@ exports.datastores = {
  */
 function workhorse(datastore) {
 
+
+    // Listeners for problem post events
+    // TODO: extend EventEmitter instead
+    var problem_listeners = [];
+    function addProblemListener(listener) {
+        validate([[listener, 'function']]);
+        problem_listeners.push(listener);
+    }
+
+    function callProblemListeners() {
+        for(var i = 0; i < problem_listeners.length; i++) {
+            listener = problem_listeners[i];
+            listener('workhorse problem added');
+        }
+    }
+
     if (!datastore) {
         datastore = new keys.Memory({ reapInterval: 200 });
         console.log('Warning: Using an in-memory data store. The problems and solutions will not be persisted'
@@ -73,6 +89,7 @@ function workhorse(datastore) {
                     if(!err) {
                         solution_callbacks[problem_id] = solution_callback;
                     }
+                    callProblemListeners(); 
                     callback(err);
                 });
 
@@ -163,7 +180,8 @@ function workhorse(datastore) {
         postSolution: postSolution,
         getSolution: getSolution,
         postProblem: postProblem,
-        getProblem: getProblem
+        getProblem: getProblem,
+        addProblemListener: addProblemListener
     };
 
 }

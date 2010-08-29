@@ -4,6 +4,10 @@ var express = require('express'),
 
 var wh = workhorse.create();
 
+wh.addProblemListener(function(message) {
+    console.log(message);
+});
+
 // Register two problems to be solved
 wh.postProblem(
         'add_two_numbers',
@@ -16,6 +20,9 @@ wh.postProblem(
             else {
                 console.log('Posted a problem');
             }
+        },
+        function(solution) {
+            console.log('Got a solution in the callback:', solution);
         });
 
 wh.getProblem(function(error, problem){
