@@ -12,6 +12,10 @@ exports.create = function(datastore) {
     return new workhorse(datastore);
 };
 
+exports.datastores = {
+    couchdb: require('./lib/datastores/couchdb')
+};
+
 /**
  * Create a new workhorse.
  */
