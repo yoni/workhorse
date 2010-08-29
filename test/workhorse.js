@@ -12,12 +12,19 @@ workhorse.listen(
         }
     });
 
+// Checked before exit of the PostSolution
+var post_solution_result;
+
+
 // TESTS
 module.exports = {
     'POST problem': function(assert, beforeExit) {
         workhorse.postProblem('add_two_numbers', 'adder', {a:1, b:2}, function(err) {
             if (err)
                 throw err;
+        },
+        function(result) {
+            post_solution_result = result;
         });
     },
     'GET problem': function(assert, beforeExit) {
@@ -28,17 +35,14 @@ module.exports = {
         });
         
         beforeExit(function(){
+            // FIXME: solution is already set to 3 by the time we run this, since tests
+            // are run in parallel.
             assert.deepEqual(problem,
-            {"id":"add_two_numbers","solver":"adder","data":{"a":1,"b":2},"solution":null});
-            exportPostSolutionTest();
+                {"id":"add_two_numbers","solver":"adder","data":{"a":1,"b":2},"solution":3});
         });
 
-    }
-};
-
-function exportPostSolutionTest() {
-
-    exports['POST solution'] =  function(assert, beforeExit) {
+    },
+    'POST solution' :  function(assert, beforeExit) {
         var solution = {
             solution: 3,
             problem_id: "add_two_numbers"
@@ -56,14 +60,11 @@ function exportPostSolutionTest() {
 
         beforeExit(function() {
             assert.ok(post_succeeded);
-            exportGetSolutionTest();
+            assert.deepEqual(post_solution_result, {problem_id: 'add_two_numbers', solution: 3});
         });
 
-    };
-}
-
-function exportGetSolutionTest() {
-    exports['GET solution'] = function(assert) {
+    },
+    'GET solution' : function(assert) {
 
         var solution = 3;
         var problem_id = "add_two_numbers";
@@ -73,5 +74,7 @@ function exportGetSolutionTest() {
             assert.equal(solution, 3);
         });
     }
-}
+};
+
+
 

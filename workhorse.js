@@ -27,6 +27,9 @@ function workhorse(datastore) {
                 + ' between application restarts');
     }
 
+    // Holds all of the solution_callback functions in memory
+    var solution_callbacks = {};
+
     var registry = problem_registry.create(datastore);
     var browser_client_uri = 'browser_client.js';
 
@@ -48,9 +51,9 @@ function workhorse(datastore) {
      * @param solver -- the type of solver that is used to solve this problem
      * @param data -- the data to pass to the solver
      * @param callback -- called after the problem is registered
-     * @return problem_id -- the unique key for the problem added
+     * @param solution_callback -- called once the problem has been solved
      */
-    function postProblem(problem_id, solver, data, callback) {
+    function postProblem(problem_id, solver, data, callback, solution_callback) {
         validate(
                 [
                     [problem_id, 'string'],
@@ -67,6 +70,9 @@ function workhorse(datastore) {
                 solver,
                 data,
                 function(err) {
+                    if(!err) {
+                        solution_callbacks[problem_id] = solution_callback;
+                    }
                     callback(err);
                 });
 
@@ -115,6 +121,7 @@ function workhorse(datastore) {
                 callback(err);
             }
             else {
+                solution_callbacks[problem_id]({problem_id: problem_id, solution: solution});
                 callback(null, {problem_id: problem_id, wrote_solution: "OK"});
             }
 
