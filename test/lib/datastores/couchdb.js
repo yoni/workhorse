@@ -1,6 +1,6 @@
 var sys = require('sys'),
         couchdb_datastore = require('../../../lib/datastores/couchdb'),
-        couchdb = require('node-couchdb/lib/couchdb');
+        couchdb = require('couchdb');
 
 var callbackURI = 'http://localhost:8000/404';
 
