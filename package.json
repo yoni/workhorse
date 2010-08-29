@@ -2,8 +2,14 @@
     "name": "workhorse",
     "description": "Distributed computation server and clients",
     "version": "0.0.13",
-    "author": "Yoni Ben-Meshulam <yoni.bmesh@gmail.com>",
+    "author": "Yoni Ben-Meshulam <yoni@opower.com>",
     "main" : "workhorse.js",
+    "maintainers" : [
+        {
+            "name": "Yoni Ben-Meshulam",
+            "email": "yoni@opower.com"
+        }
+    ],
     "contributors": [
         {
             "name": "Yoni Ben-Meshulam",
