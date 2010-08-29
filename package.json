@@ -1,7 +1,7 @@
 {
     "name": "workhorse",
     "description": "Distributed computation server and clients",
-    "version": "0.0.5",
+    "version": "0.0.7",
     "author": "Yoni Ben-Meshulam <yoni.bmesh@gmail.com>",
     "main" : "workhorse.js",
     "contributors": [
@@ -14,7 +14,6 @@
         "connect": ">= 0.2.3",
         "express": ">=1.0.0rc",
         "ejs": ">=0.0.3",
-        "expresso": ">=0.6.1",
         "keys": ">=0.1.0"
     },
     "licenses": [
