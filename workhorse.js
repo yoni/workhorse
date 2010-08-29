@@ -117,7 +117,8 @@ function workhorse(datastore) {
             }
             else {
                 if (!problem) {
-                    callback({ error: 'No problems found.' });
+                    // Not an error, but no problems. Caller shouldhandle this.
+                    callback(null,null);
                 }
                 callback(null, problem);
             }
