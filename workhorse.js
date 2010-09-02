@@ -138,7 +138,7 @@ function workhorse(datastore) {
             if (err) {
                 callback(err);
             }
-            else {
+            else if(problem) {
                 solution_callbacks[problem_id]({problem_id: problem_id, solution: solution});
                 callback(null, {problem_id: problem_id, wrote_solution: "OK"});
             }
