@@ -2,8 +2,6 @@ var sys = require('sys'),
         couchdb_datastore = require('../../../lib/datastores/couchdb'),
         couchdb = require('couchdb');
 
-var callbackURI = 'http://localhost:8000/404';
-
 // TODO: create the db and destroy it at the end
 var client = couchdb.createClient(5984, 'localhost');
 
@@ -11,7 +9,7 @@ var client = couchdb.createClient(5984, 'localhost');
 var db = client.db('workhorse_test');
 
 function newDatastore() {
-    return couchdb_datastore.create({host: 'localhost', port: 5984, db_name: 'workhorse_test'});
+    return couchdb_datastore.create({host: 'localhost', port: 5984, name: 'workhorse_test'});
 }
 
 module.exports = {
