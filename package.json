@@ -1,7 +1,7 @@
 {
     "name": "workhorse",
     "description": "Distributed computation server and clients",
-    "version": "0.0.13",
+    "version": "0.0.14",
     "author": "Yoni Ben-Meshulam <yoni@opower.com>",
     "main" : "workhorse.js",
     "maintainers" : [
