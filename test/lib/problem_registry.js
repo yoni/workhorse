@@ -130,54 +130,13 @@ module.exports = {
             assert.ok(solve_worked, 'Could not solve the problem');
         });
     },
-    'Can not solve a problem twice': function(assert, beforeExit) {
-
-        var can_not_solve_twice;
-        var error;
-        var pr = newRegistry();
-
-        pr.register('1', 'greeter', callbackURI, {greeting:'hi'}, function(err1) {
-
-            if (err1) {
-                error = err1;
-            }
-            else {
-
-                pr.solve('1', {answer: 42}, function(err2) {
-
-                    if (err2) {
-                        error = err2;
-                    }
-                    else {
-                        pr.solve('1', {answer: 42}, function(err3) {
-
-                            // Expecting an error on the second call to 'solve'
-                            if (err3) {
-                                can_not_solve_twice = true;
-                            }
-
-                        });
-
-                    }
-
-                });
-
-            }
-
-        });
-
-        beforeExit(function() {
-            assert.ok(!error, error);
-            assert.ok(can_not_solve_twice, 'Should not be able to solve the same problem twice');
-        });
-    },
     'Get the next problem from the queue': function(assert, beforeExit) {
 
         var got_problem_to_solve;
         var error;
         var pr = newRegistry();
 
-        pr.register('1', 'adder', callbackURI, {a:1, b:2}, function(err1) {
+        pr.register('1', 'adder', {a:1, b:2}, function(err1) {
 
             if (err1) {
                 error = err1;
