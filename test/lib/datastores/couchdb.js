@@ -1,6 +1,7 @@
 var sys = require('sys'),
-        couchdb_datastore = require('../../../lib/datastores/couchdb'),
-        couchdb = require('couchdb');
+    assert = require('assert'),
+    couchdb_datastore = require('../../../lib/datastores/couchdb'),
+    couchdb = require('couchdb');
 
 // TODO: create the db and destroy it at the end
 var client = couchdb.createClient(5984, 'localhost');
@@ -26,7 +27,7 @@ function remove(key, rev) {
     });
 }
 
-function constructor(assert) {
+function constructor() {
     var store = newDatastore();
     assert.ok(store);
     assert.ok(store.has);
@@ -34,7 +35,7 @@ function constructor(assert) {
     assert.ok(store.set);
 }
 
-function set(assert, beforeExit) {
+function set(beforeExit) {
 
     var set_worked;
     var error;
@@ -79,7 +80,7 @@ function set(assert, beforeExit) {
 
 }
 
-function get(assert, beforeExit) {
+function get(beforeExit) {
 
     var get_worked;
     var error;
@@ -121,7 +122,7 @@ function get(assert, beforeExit) {
 
 }
 
-function has(assert, beforeExit) {
+function has(beforeExit) {
     var key = 'document_for_has_after_put';
     var error;
     var has_after_put_worked = false;

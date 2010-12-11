@@ -1,4 +1,5 @@
 var express = require('express');
+var assert = require('assert');
 workhorse = require('../workhorse').create();
 
 // SETUP
@@ -18,7 +19,7 @@ var post_solution_result;
 
 // TESTS
 module.exports = {
-    'POST problem': function(assert, beforeExit) {
+    'POST problem': function(beforeExit) {
         workhorse.postProblem('add_two_numbers', 'adder', {a:1, b:2}, function(err) {
             if (err)
                 throw err;
@@ -27,14 +28,14 @@ module.exports = {
             post_solution_result = result;
         });
     },
-    'GET problem': function(assert, beforeExit) {
+    'GET problem': function(beforeExit) {
         var problem;
 
         workhorse.getProblem(function(err, prob){
             problem = prob;
         });
         
-        beforeExit(function(){
+        beforeExit( function() {
             // FIXME: solution is already set to 3 by the time we run this, since tests
             // are run in parallel.
             assert.deepEqual(problem,
@@ -42,7 +43,7 @@ module.exports = {
         });
 
     },
-    'POST solution' :  function(assert, beforeExit) {
+    'POST solution' :  function(beforeExit) {
         var solution = {
             solution: 3,
             problem_id: "add_two_numbers"
@@ -64,7 +65,7 @@ module.exports = {
         });
 
     },
-    'GET solution' : function(assert) {
+    'GET solution' : function() {
 
         var solution = 3;
         var problem_id = "add_two_numbers";

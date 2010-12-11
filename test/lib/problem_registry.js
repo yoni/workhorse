@@ -1,5 +1,6 @@
 var problem_registry = require('../../lib/problem_registry'),
-        keys = require('keys');
+    assert = require('assert'),
+    keys = require('keys');
 
 var callbackURI = 'http://localhost:8000/404';
 
@@ -9,13 +10,13 @@ function newRegistry() {
 
 
 module.exports = {
-    'Constructor': function(assert) {
+    'Constructor': function() {
 
         var pr = newRegistry();
         assert.ok(pr);
 
     },
-    'Register a problem': function(assert, beforeExit) {
+    'Register a problem': function(beforeExit) {
 
         var add_worked;
         var error;
@@ -42,7 +43,7 @@ module.exports = {
         });
 
     },
-    "Can not register same problem twice": function(assert, beforeExit) {
+    "Can not register same problem twice": function(beforeExit) {
 
         var can_not_add_same_problem_twice = false;
         var pr = newRegistry();
@@ -62,7 +63,7 @@ module.exports = {
         });
 
     },
-    'Get a problem which has been registered': function(assert, beforeExit) {
+    'Get a problem which has been registered': function(beforeExit) {
 
         var get_worked;
         var error;
@@ -97,7 +98,7 @@ module.exports = {
         });
 
     },
-    'Solve a problem': function(assert, beforeExit) {
+    'Solve a problem': function(beforeExit) {
 
         var solve_worked;
         var error;
@@ -130,7 +131,7 @@ module.exports = {
             assert.ok(solve_worked, 'Could not solve the problem');
         });
     },
-    'Get the next problem from the queue': function(assert, beforeExit) {
+    'Get the next problem from the queue': function(beforeExit) {
 
         var got_problem_to_solve;
         var error;
