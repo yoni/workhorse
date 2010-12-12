@@ -6,7 +6,7 @@ var express = require('express'),
 // Add a simple problem for testing
 workhorse.postProblem(
     'add_two_numbers',
-    'new_adder',
+    'adder',
     {a:1, b:3},
     function(err) {
         if(err) {
