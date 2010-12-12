@@ -25,6 +25,7 @@ wh.postProblem(
             console.log('Got a solution in the callback:', solution);
         });
 
+// Retrieve a problem and post a solution
 wh.getProblem(function(error, problem){
     if(error) {
         throw error;
