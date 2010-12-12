@@ -31,4 +31,4 @@ app.get('/', function(req, res){
 app.listen(3000);
 
 var socket = io.listen(app);
-workhorse.listen({socket:socket});
+workhorse.listen(socket);

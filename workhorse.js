@@ -22,7 +22,6 @@ exports.datastores = {
  */
 function workhorse(datastore) {
 
-
     // Listeners for problem post events
     // TODO: extend EventEmitter instead
     var problem_listeners = [];
@@ -99,9 +98,9 @@ function workhorse(datastore) {
     /**
      * Create a workhorse HTTP server, which extends the express.js server.
      */
-    function listen(options) {
+    function listen(socket) {
 
-        options.socket.addListener('message', function(message) {
+        socket.addListener('message', function(message) {
             log(message);
         });
 
