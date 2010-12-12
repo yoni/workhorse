@@ -52,5 +52,9 @@ Workhorse provides an HTTP server for GETting problems to solve, GETting solvers
 in a RESTful way. POSTing problems will be supported in the near future, as well.
 
 Once a problem has been solved, the JSON returned from GETting the problem will include the solution.
-The solution will also be POSTed to the URI with which it was registered. 
+The solution will also be POSTed to the URI with which it was registered.
 
+
+Source Repository
+-----------------
+https://github.com/yoni/workhorse
