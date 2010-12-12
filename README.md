@@ -16,8 +16,8 @@ For dependencies, see package.json
 
 Run All Tests
 ---------
-    expresso
-
+    bin/test
+     
 Run Individual Tests
 ---------
     expresso <test path>
