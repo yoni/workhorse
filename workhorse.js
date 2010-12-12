@@ -47,8 +47,8 @@ function workhorse(datastore) {
     var solution_callbacks = {};
 
     var registry = problem_registry.create(datastore);
-    var browser_client_uri = 'browser_client.js';
 
+    // TODO: move this out of here
     function validate(argtypes, message) {
 
         for (i in argtypes) {
