@@ -84,13 +84,6 @@
                 // First worker
                 delegateToWorker();
 
-    //            setTimeout(function(){
-    //                if(!solved) {
-    //                    // timeout happened and problem hasn't been solved. Hit google again.
-    //                    log('First worker timed out. Spawning another.');
-    //                    delegateToWorker();
-    //                }
-    //            }, 3000);
             } else {
                 log('This browser does not support web workers.');
             }
