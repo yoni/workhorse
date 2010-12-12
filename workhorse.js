@@ -95,17 +95,6 @@ function workhorse(datastore) {
 
     }
 
-    /**
-     * Create a workhorse HTTP server, which extends the express.js server.
-     */
-    function listen(socket) {
-
-        socket.addListener('message', function(message) {
-            log(message);
-        });
-
-    }
-
     // TODO: This should be the socket "ready:true" handler
     function getProblem(callback) {
 
