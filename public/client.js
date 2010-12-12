@@ -16,16 +16,20 @@
 
         var problems_solved = 0;
 
+        socket.on('connect', function() {
+            log('Connect yo.');
+            ready();
+        });
+
         socket.on('message', function(msg) {
-            //log(['WebSocket message: ', msg]);
+            log(['WebSocket message: ', msg]);
             // TODO: have message contain a problem, as opposed to being a problem
             work(msg);
         });
 
-        socket.connect( function() {
-            ready();
-        });
-
+       /**
+         * Indicate to the workhorse server that the client is ready to receive the next problem.
+         */
         function ready() {
             socket.send({ ready: true });
         }
@@ -106,12 +110,17 @@
                    (new Date() - session_start_date) / problems_solved) ;
         }
 
-       function log_performance(seconds_to_solve) {
+        function log_performance(seconds_to_solve) {
            log('Seconds to solve: ' + seconds_to_solve);
            log('Problems solved: ' + problems_solved);
            log_total_time();
            log_average_time();
-       }
+        }
 
+        socket.connect();
+        window.workhorse = {
+            ready: ready,
+            socket: socket
+        };
    }
 })();

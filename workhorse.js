@@ -3,6 +3,7 @@ var connect = require('connect'),
     request = require('request'),
     assert = require('assert'),
     keys = require('keys'),
+    log = require('./lib/logger').log,
     problem_registry = require('./lib/problem_registry');
 
 /**
@@ -39,7 +40,7 @@ function workhorse(datastore) {
 
     if (!datastore) {
         datastore = new keys.Memory({ reapInterval: 200 });
-        console.log('Warning: Using an in-memory data store. The problems and solutions will not be persisted'
+        log('Warning: Using an in-memory data store. The problems and solutions will not be persisted'
                 + ' between application restarts');
     }
 
@@ -89,7 +90,7 @@ function workhorse(datastore) {
                     if(!err) {
                         solution_callbacks[problem_id] = solution_callback;
                     }
-                    callProblemListeners(); 
+                    callProblemListeners();
                     callback(err);
                 });
 
@@ -102,7 +103,7 @@ function workhorse(datastore) {
     function listen(options) {
 
         options.socket.addListener('message', function(message) {
-            console.log(message);
+            log(message);
         });
 
     }

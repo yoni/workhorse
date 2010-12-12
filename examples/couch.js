@@ -1,6 +1,7 @@
 var express = require('express'),
     connect = require('connect'),
     workhorse = require('../workhorse'),
+    log = require('util').log,
     couch_store = require('../lib/datastores/couchdb');
 
 var host = 'localhost';
@@ -24,17 +25,17 @@ function run() {
         {a:1, b:3},
         function(err) {
             if (err) {
-                console.log(err);
+                log(err);
                 throw err;
             }
             else {
-                console.log('Posted a problem');
+                log('Posted a problem');
                 wh.getProblem(function(error, problem) {
                     if (error) {
                         throw error;
                     }
                     else {
-                        console.log('Got a problem.');
+                        log('Got a problem.');
                         // Now we solve the problem and get the solution
                         postASolutionAndGetIt(problem);
                     }
@@ -48,17 +49,17 @@ function run() {
 function postASolutionAndGetIt(problem) {
     wh.postSolution({solution:problem.data.a + problem.data.b, problem_id: problem_id}, function(err) {
         if (err) {
-            console.log(err);
+            log(err);
             throw err;
         }
         else {
-            console.log('Posted the solution.');
+            log('Posted the solution.');
             wh.getSolution(problem_id, function(err, solution) {
                 if (err) {
                     throw err;
                 }
                 else {
-                    console.log('Got the solution.');
+                    log('Got the solution.');
                     cleanup();
                 }
             });

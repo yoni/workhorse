@@ -1,11 +1,12 @@
 var express = require('express'),
     connect = require('connect'),
+    log = require('util').log,
     workhorse = require('../workhorse');
 
 var wh = workhorse.create();
 
 wh.addProblemListener(function(message) {
-    console.log(message);
+    log(message);
 });
 
 // Register two problems to be solved
@@ -18,11 +19,11 @@ wh.postProblem(
                 throw err;
             }
             else {
-                console.log('Posted a problem');
+                log('Posted a problem');
             }
         },
         function(solution) {
-            console.log('Got a solution in the callback:', solution);
+            log('Got a solution in the callback:', solution);
         });
 
 // Retrieve a problem and post a solution
@@ -31,19 +32,19 @@ wh.getProblem(function(error, problem){
         throw error;
     }
     else {
-        console.log('Got a problem.');
+        log('Got a problem.');
         wh.postSolution({solution:problem.data.a + problem.data.b, problem_id: 'add_two_numbers'}, function(err) {
             if(err) {
                 throw err;
             }
             else{
-                console.log('Posted the solution.');
+                log('Posted the solution.');
                 wh.getSolution('add_two_numbers', function(err, solution) {
                     if(err) {
                         throw err;
                     }
                     else {
-                        console.log('Got the solution.');
+                        log('Got the solution.');
                     }
                 });
             }
