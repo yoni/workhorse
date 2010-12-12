@@ -1,5 +1,6 @@
 var express = require('express'),
-    io = require('socket.io');
+    io = require('socket.io'),
+    workhorse = require('./lib/workhorse_socket_server').create();
 
 var app = express.createServer();
 app.use(express.staticProvider(__dirname + '/public'));
@@ -15,3 +16,5 @@ socket.on('connection', function(client){
     client.on('message', function(){ console.log('Got message from client.'); });
     client.on('disconnect', function(){ console.log('Client disconnected.'); });
 });
+
+workhorse.listen({socket:socket});
