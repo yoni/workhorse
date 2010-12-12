@@ -1,17 +1,9 @@
 var express = require('express');
 var assert = require('assert');
-workhorse = require('../workhorse').create();
+workhorse = require('../../lib/workhorse_registrar').create();
 
 // SETUP
 // add a problem to solve
-
-
-workhorse.listen(
-    {
-        socket:{
-            addListener:function() {}
-        }
-    });
 
 // Checked before exit of the PostSolution
 var post_solution_result;
@@ -34,7 +26,7 @@ module.exports = {
         workhorse.getProblem(function(err, prob){
             problem = prob;
         });
-        
+
         beforeExit( function() {
             // FIXME: solution is already set to 3 by the time we run this, since tests
             // are run in parallel.

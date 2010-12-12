@@ -1,7 +1,7 @@
 var express = require('express'),
     io = require('socket.io'),
     log = require('util').log,
-    workhorse = require('./lib/workhorse_socket_server').create();
+    workhorse = require('../lib/workhorse_socket_server').create();
 
 // Add a simple problem for testing
 workhorse.postProblem(
