@@ -7,9 +7,9 @@
 
  */
 var sys = require('sys');
-var workhorse = require('../workhorse');
-var available_clients = require('./available_clients');
-var log = require('./logger').log;
+var workhorse = require('./lib/workhorse_registrar');
+var available_clients = require('./lib/available_clients');
+var log = require('./lib/logger').log;
 
 /**
  * Creates a new workhorse instance
@@ -31,8 +31,8 @@ function create() {
      *
      * @param options
      */
-    function listen(options) {
-        socket = options.socket;
+    function listen(sock) {
+        socket = sock;
 
         socket.addListener('connection', function(client) {
             log('Workhorse client ' + client.sessionId + ' connected');
