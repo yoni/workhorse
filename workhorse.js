@@ -98,7 +98,6 @@ function workhorse(datastore) {
 
     /**
      * Create a workhorse HTTP server, which extends the express.js server.
-     * @return a workhorse server, which is an extension of an express server
      */
     function listen(options) {
 

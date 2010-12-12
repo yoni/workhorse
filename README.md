@@ -12,12 +12,12 @@ For usage, see examples. For more detailed use cases, see tests.
 
 Dependencies
 ------------
-For dependencies, see package.json
+For runtime dependencies, see package.json
 
 Run All Tests
 ---------
     bin/test
-     
+
 Run Individual Tests
 ---------
     expresso <test path>

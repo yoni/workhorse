@@ -9,6 +9,9 @@
         }
     }
 
+    /**
+     * Connects to the workhorse server, retrieves problems, and spawns WebWorkers to work on those problems.
+     */
     function start_workhorse_client() {
 
         var socket = new io.Socket("localhost");
@@ -35,7 +38,7 @@
         function ready() {
             socket.send({ ready: true });
         }
-        
+
         /**
          * Solve the given problem. Problems look like: {solver:solver, data:data}
          * @param problem
