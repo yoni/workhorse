@@ -23,6 +23,7 @@ workhorse.postProblem(
 var app = express.createServer();
 app.use(express.staticProvider(__dirname + '/public'));
 app.use('/solvers', express.staticProvider(__dirname + '/solvers'));
+
 app.get('/', function(req, res){
     res.render('index.html.ejs');
 });

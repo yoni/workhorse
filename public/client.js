@@ -35,6 +35,7 @@
         function ready() {
             socket.send({ ready: true });
         }
+        
         /**
          * Solve the given problem. Problems look like: {solver:solver, data:data}
          * @param problem
