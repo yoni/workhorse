@@ -5,10 +5,6 @@ var express = require('express'),
 
 var wh = workhorse.create();
 
-wh.addProblemListener(function(message) {
-    log(message);
-});
-
 // Register two problems to be solved
 wh.postProblem(
         'add_two_numbers',

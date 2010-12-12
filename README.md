@@ -26,7 +26,11 @@ e.g.
     expresso test/workhorse.js
 
 
-Data Store
+Examples
+--------
+See the examples directory.
+
+Data Stores
 ----------
 Workhorse holds a registry of problems and their solutions in the form of key/value pairs. This registry
 uses a key/value data store, which is the main argument to the workhorse create function.
@@ -38,22 +42,20 @@ You may use any of the `keys` supported database management systems or roll your
 implementing the `set`, `has`, and `get` actions.
 
 A CouchDB data store is also being developed as part of the workhorse library and supports the
-aforementioned actions. To use the couchdb datastore, create a couch datastore and initialize the workhorse with it:
-
-    var workhorse = require('workhorse'),
-        couch_store = require('workhorse/lib/datastores/couchdb');
-
-    var datastore = couch_store.create('localhost', 5984, 'my_workhorse_couch');
-    var wh = workhorse.create(datastore);
+aforementioned actions.
 
 Server
 ------
-Workhorse provides an HTTP server for GETting problems to solve, GETting solvers, and POSTing solutions
-in a RESTful way. POSTing problems will be supported in the near future, as well.
+Workhorse provides a server for retrieving problems to solve and solvers, and posting solutions. The server
+is based on the WebSocket protocol, using the socket.io library. For browsers which to not support WebSockets,
+socket.io with automatically fall back on HTTP polling.
 
-Once a problem has been solved, the JSON returned from GETting the problem will include the solution.
-The solution will also be POSTed to the URI with which it was registered.
+Once a problem has been solved, the problem will include the posted solution.
 
+Client
+------
+The workhorse client loads a problem from the server and spawns a WebWorker to solve it. The solution
+is then posted back to the server and another problem is retrieved. This is repeated indefinitely.
 
 Source Repository
 -----------------
