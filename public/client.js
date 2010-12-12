@@ -27,7 +27,9 @@
             work(msg);
         });
 
-       /**
+        socket.connect();
+
+        /**
          * Indicate to the workhorse server that the client is ready to receive the next problem.
          */
         function ready() {
@@ -110,7 +112,6 @@
            log_average_time();
         }
 
-        socket.connect();
         window.workhorse = {
             ready: ready,
             socket: socket
