@@ -1,8 +1,10 @@
 var test_server = require('./test_support/test_server'),
+    assert = require('assert'),
     soda = require('soda');
 
+var tests_passed = false;
+var server;
 var port = 3000;
-test_server.setUpWorkhorseServer(port);
 
 function runSodaTest() {
 
@@ -22,11 +24,21 @@ function runSodaTest() {
       .testComplete()
       .end(function(err){
           if (err) throw err;
-          console.log('done');
-          process.exit(0);
+          tests_passed = true;
+          server.app.close();
       });
 
 }
 
-// wait for the workhorse server to come up
-setTimeout(runSodaTest(), 500);
+module.exports = {
+    'GET problem': function(beforeExit) {
+        server = test_server.setUpWorkhorseServer(port);
+
+        runSodaTest();
+
+        beforeExit( function() {
+            assert.ok(tests_passed);
+        });
+    }
+};
+
