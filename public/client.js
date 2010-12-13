@@ -57,23 +57,25 @@
 
                         if (msg.data.solution) {
                             // another worker might have already solved it
+                             log([
+                                'Sending solution to server',
+                                {
+                                    problem: problem,
+                                    solution: msg.data.solution
+                                }
+                            ]);
+
                             if(!solved) {
                                 socket.send({problem: problem, solution: msg.data.solution});
 
                                 solved = true;
                                 problems_solved++;
 
-                                log([
-                                    'Sending solution to server',
-                                    {
-                                        problem: problem,
-                                        solution: msg.data.solution
-                                    }
-                                ]);
-
                                 var seconds_to_solve = (new Date() - start_time)/1000;
                                 log_performance(seconds_to_solve);
+                                update_num_problems_solved();
                             }
+
                             ready();
                         }
                         else if(msg.data.status) {
@@ -114,6 +116,10 @@
            log('Problems solved: ' + problems_solved);
            log_total_time();
            log_average_time();
+        }
+
+        function update_num_problems_solved() {
+            $('.problems_solved').html(problems_solved);
         }
 
         window.workhorse = {
