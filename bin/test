@@ -1,1 +1,1 @@
-expresso test/lib/*.js test/lib/datastores/*.js
+expresso test/*.js test/lib/*.js test/lib/datastores/*.js
