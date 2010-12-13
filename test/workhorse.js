@@ -1,14 +1,15 @@
 var test_server = require('./test_support/test_server'),
     soda = require('soda');
 
-test_server.setUpWorkhorseServer(3000);
+var port = 3000;
+test_server.setUpWorkhorseServer(port);
 
 function runSodaTest() {
 
     var browser = soda.createClient({
         host: 'localhost'
       , port: 4444
-      , url: 'http://localhost:3000'
+      , url: 'http://localhost:' + port
       , browser: 'firefox'
     });
 
@@ -27,4 +28,5 @@ function runSodaTest() {
 
 }
 
+// wait for the workhorse server to come up
 setTimeout(runSodaTest(), 500);
