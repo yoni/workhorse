@@ -21,8 +21,11 @@ workhorse.postProblem(
     });
 
 var app = express.createServer();
-app.use(express.staticProvider(__dirname + '/public'));
-app.use('/solvers', express.staticProvider(__dirname + '/solvers'));
+app.configure(function(){
+    app.set('views', '../views');
+});
+app.use(express.staticProvider('../public'));
+app.use('/solvers', express.staticProvider('../solvers'));
 
 app.get('/', function(req, res){
     res.render('index.html.ejs');
