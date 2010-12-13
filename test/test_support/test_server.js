@@ -26,10 +26,10 @@ function setUpWorkhorseServer(port) {
 
     var app = express.createServer();
     app.configure(function(){
-        app.set('views', '../views');
+        app.set('views', __dirname + '/../../views');
     });
-    app.use(express.staticProvider('../public'));
-    app.use('/solvers', express.staticProvider('../solvers'));
+    app.use(express.staticProvider(__dirname + '/../../public'));
+    app.use('/solvers', express.staticProvider(__dirname + '/../../solvers'));
     app.get('/', function(req, res){
         res.render('index.html.ejs');
     });
