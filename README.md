@@ -54,3 +54,6 @@ is then posted back to the server and another problem is retrieved. This is repe
 
 ## Source Repository ##
 https://github.com/yoni/workhorse
+
+## Author ##
+[Yoni Ben-Meshulam](http://heyitsyoni.com)
